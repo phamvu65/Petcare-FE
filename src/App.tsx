@@ -8,7 +8,6 @@ import Staff from "./components/Staff/Staff";
 import Admin from "./components/Admin/Admin";
 import UserProfile from "./components/User/UserProfile";
 import Register from "./components/Register/Register"; // 👈 THÊM
-
 const Home: React.FC = () => (
   <h1 className="text-3xl font-bold">Chào mừng đến với PetCare!</h1>
 );
@@ -20,7 +19,7 @@ const App: React.FC = () => {
 
       <div style={{ padding: "24px 40px" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Customer />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/staff" element={<Staff />} />
           <Route path="/admin" element={<Admin />} />
