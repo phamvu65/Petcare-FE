@@ -1,0 +1,193 @@
+/* Layout chung */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- STATS CARDS --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cột bằng nhau */
+  gap: 20px;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 4px 0;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* --- CONTENT GRID --- */
+.dashboard-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Cột trái to gấp đôi cột phải */
+  gap: 20px;
+}
+
+.dashboard-section {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #334155;
+}
+
+.view-all-btn {
+  background: none;
+  border: none;
+  color: #204ecf;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.view-all-btn:hover {
+  text-decoration: underline;
+}
+
+/* --- TABLE --- */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #64748b;
+  padding: 8px 0;
+  font-weight: 600;
+}
+
+.dashboard-table td {
+  padding: 12px 0;
+  border-bottom: 1px solid #f8fafc;
+  font-size: 14px;
+  color: #334155;
+}
+
+.dashboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.text-muted { color: #94a3b8; }
+.text-sm { font-size: 12px; }
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-pending { background: #fff7ed; color: #c2410c; } /* Cam */
+.status-shipping { background: #eff6ff; color: #1d4ed8; } /* Xanh dương */
+.status-success { background: #f0fdf4; color: #15803d; } /* Xanh lá */
+.status-cancel { background: #fef2f2; color: #b91c1c; } /* Đỏ */
+
+/* --- BOOKING LIST --- */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #204ecf;
+}
+
+.booking-time {
+  font-weight: 700;
+  color: #204ecf;
+  font-size: 15px;
+  min-width: 45px;
+}
+
+.booking-info {
+  flex: 1;
+}
+
+.booking-service {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.booking-detail {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.action-btn-sm {
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.action-btn-sm:hover {
+  background: #e2e8f0;
+}

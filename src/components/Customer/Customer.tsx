@@ -183,17 +183,23 @@ const Customer: React.FC = () => {
           </div>
         )}
 
-        {/* PAGINATION */}
+        {/* PAGINATION - Đã sửa logic */}
         <div className="pagination">
-          <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-            &laquo; Trước
-          </button>
+          {page > 1 && (
+            <button onClick={() => setPage(page - 1)}>
+              &laquo; Trước
+            </button>
+          )}
+
           <span>
             Trang {page}/{totalPages}
           </span>
-          <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-            Sau &raquo;
-          </button>
+
+          {page < totalPages && (
+            <button onClick={() => setPage(page + 1)}>
+              Sau &raquo;
+            </button>
+          )}
         </div>
       </main>
     </div>
