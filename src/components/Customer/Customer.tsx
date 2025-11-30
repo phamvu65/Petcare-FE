@@ -1,6 +1,6 @@
-// src/pages/Customer/Customer.tsx
 import React, { useEffect, useState } from "react";
 import api from "../../api/axiosInstance";
+import { useNavigate, useSearchParams } from "react-router-dom"; 
 import "./Customer.css";
 
 const PAGE_SIZE = 30;
@@ -29,51 +29,67 @@ interface Product {
 const Customer: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [sort, setSort] = useState<string>("id:desc");
+  const navigate = useNavigate();
 
-  const [sort, setSort] = useState<string>("id:asc"); // sort mặc định
+  const [searchParams] = useSearchParams();
 
-  // ================== FETCH CATEGORIES ==================
+  // --- 1. XỬ LÝ URL ---
+  useEffect(() => {
+    const urlCatId = searchParams.get("categoryId");
+    if (urlCatId) {
+      setSelectedCategories([Number(urlCatId)]);
+    } else {
+      setSelectedCategories([]);
+    }
+  }, [searchParams]);
+
+  // --- 2. LOAD DANH MỤC ---
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await api.get("/categories/list", {
-          params: { sort: "id:asc", page: 1, size: 30 },
-        });
-
-        setCategories(res.data.data.categories);
+        const res = await api.get("/categories/list");
+        setCategories(res.data.data.categories || []);
       } catch (err) {
         console.error("Lỗi categories:", err);
       }
     };
-
     fetchCategories();
   }, []);
 
-  // ================== FETCH PRODUCTS ==================
+  // --- 3. LOAD SẢN PHẨM ---
   const fetchProducts = async () => {
     setLoading(true);
-
     try {
-      const res = await api.get("/products/list", {
-        params: {
-          sort: sort,
-          page: page,
-          size: PAGE_SIZE,
-          categoryId:
-            selectedCategories.length > 0
-              ? selectedCategories.join(",") // Gửi danh sách các categoryId
-              : undefined,
-        },
-      });
+      const searchKeyword = searchParams.get("search") || "";
+      const typeParam = searchParams.get("type");
+      let typeKeyword = "";
+      
+      if (typeParam === 'food') typeKeyword = "thức ăn";
+      else if (typeParam === 'clothes') typeKeyword = "áo";
+      else if (typeParam === 'toys') typeKeyword = "đồ chơi";
 
-      const pageData = res.data.data;
-      setProducts(pageData.products);
-      setTotalPages(pageData.totalPages ?? 1);
+      const finalKeyword = searchKeyword || typeKeyword;
+
+      const params: any = {
+        sort: sort,
+        page: page,
+        size: PAGE_SIZE,
+        keyword: finalKeyword, 
+      };
+
+      if (selectedCategories.length > 0) {
+        params.categoryId = selectedCategories.join(",");
+      }
+
+      const res = await api.get("/products/list", { params });
+      
+      setProducts(res.data.data.products);
+      setTotalPages(res.data.data.totalPages ?? 1);
     } catch (err) {
       console.error("Lỗi load products", err);
     } finally {
@@ -81,30 +97,61 @@ const Customer: React.FC = () => {
     }
   };
 
-  // gọi khi page hoặc sort thay đổi
   useEffect(() => {
     fetchProducts();
-  }, [page, sort]);
+  }, [page, sort, selectedCategories, searchParams]); 
 
+  // --- HANDLERS ---
   const handleCategoryChange = (id: number) => {
     setSelectedCategories((prev) =>
-      prev.includes(id)
-        ? prev.filter((categoryId) => categoryId !== id)  // Bỏ chọn nếu đã chọn
-        : [...prev, id]  // Thêm vào nếu chưa chọn
+      prev.includes(id) ? prev.filter((cid) => cid !== id) : [...prev, id]
     );
+    setPage(1);
   };
 
   const handleFilter = () => {
-    setPage(1);  // Reset page về 1 khi lọc lại
+    setPage(1);
     fetchProducts();
+  };
+
+  const handleAddToCart = async (product: Product) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Vui lòng đăng nhập để mua hàng!");
+      return;
+    }
+    try {
+      await api.post("/cart/add", { productId: product.id, quantity: 1 });
+      alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
+      window.dispatchEvent(new Event("cartChange"));
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Thêm vào giỏ thất bại.");
+    }
+  };
+
+  // 🟢 SỬA LỖI TẠI ĐÂY: Thêm productId vào state
+  const handleBuyNow = (product: Product) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Vui lòng đăng nhập để mua hàng!");
+      return;
+    }
+    navigate("/checkout", { 
+      state: { 
+        items: [{ 
+            ...product, 
+            productId: product.id, // 🟢 QUAN TRỌNG: Phải có trường này
+            quantity: 1, 
+            type: 'product' 
+        }] 
+      } 
+    });
   };
 
   return (
     <div className="customer-page">
-      {/* Sidebar */}
       <aside className="customer-sidebar">
-        <h3 className="sidebar-title">Loại Sản Phẩm</h3>
-
+        <h3 className="sidebar-title">Danh Mục</h3>
         <ul className="category-list">
           {categories.map((cat) => (
             <li key={cat.id} className="category-item">
@@ -119,28 +166,19 @@ const Customer: React.FC = () => {
             </li>
           ))}
         </ul>
-
-        {/* NÚT LỌC */}
-        <button className="filter-btn" onClick={handleFilter}>
-          Lọc
-        </button>
+        <button className="filter-btn" onClick={handleFilter}>Lọc</button>
       </aside>
 
-      {/* MAIN CONTENT */}
       <main className="customer-content">
         <div className="customer-content-header">
-          <h2>Sản phẩm</h2>
-
+          <h2>
+            {searchParams.get("search") 
+              ? `Kết quả tìm kiếm: "${searchParams.get("search")}"` 
+              : "Tất cả sản phẩm"}
+          </h2>
           <div className="content-controls">
-            <span>Hiển thị {PAGE_SIZE} / trang</span>
-
-            {/* SORT */}
-            <select
-              className="sort-select"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-            >
-              <option value="id:asc">Mặc định</option>
+            <select className="sort-select" value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="id:desc">Mới nhất</option>
               <option value="price:asc">Giá tăng dần</option>
               <option value="price:desc">Giá giảm dần</option>
             </select>
@@ -148,29 +186,34 @@ const Customer: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="loading">Đang tải...</div>
+          <div className="loading">Đang tìm kiếm sản phẩm...</div>
+        ) : products.length === 0 ? (
+          <div className="empty-state" style={{textAlign:'center', padding: 50, color: '#888'}}>
+             <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+             <button onClick={() => navigate("/customer")} style={{marginTop:10, padding:'8px 15px', cursor:'pointer'}}>Xem tất cả</button>
+          </div>
         ) : (
           <div className="product-grid">
             {products.map((p) => {
-              const firstImageUrl =
-                p.images?.length ? p.images[0].imageUrl : undefined;
-
+              const firstImageUrl = p.images?.length ? p.images[0].imageUrl : undefined;
               return (
                 <div className="product-card" key={p.id}>
                   <div className="product-image-wrap">
                     {firstImageUrl ? (
                       <img src={firstImageUrl} alt={p.name} />
                     ) : (
-                      <div className="product-image-placeholder">
-                        Ảnh sản phẩm
-                      </div>
+                      <div className="product-image-placeholder">No Image</div>
                     )}
+                    
+                    <div className="product-actions-overlay">
+                        <button className="action-btn btn-buy-now" onClick={() => handleBuyNow(p)}>Mua Ngay</button>
+                        <button className="action-btn btn-add-cart" onClick={() => handleAddToCart(p)}>Thêm vào giỏ</button>
+                    </div>
                   </div>
 
                   <div className="product-info">
                     <div className="product-brand">{p.categoryName}</div>
-                    <div className="product-name">{p.name}</div>
-
+                    <div className="product-name" title={p.name}>{p.name}</div>
                     <div className="product-price-wrap">
                       <span className="product-price">
                         {p.price.toLocaleString()}đ
@@ -183,23 +226,10 @@ const Customer: React.FC = () => {
           </div>
         )}
 
-        {/* PAGINATION - Đã sửa logic */}
         <div className="pagination">
-          {page > 1 && (
-            <button onClick={() => setPage(page - 1)}>
-              &laquo; Trước
-            </button>
-          )}
-
-          <span>
-            Trang {page}/{totalPages}
-          </span>
-
-          {page < totalPages && (
-            <button onClick={() => setPage(page + 1)}>
-              Sau &raquo;
-            </button>
-          )}
+          {page > 1 && <button onClick={() => setPage(page - 1)}>&laquo; Trước</button>}
+          <span>Trang {page}/{totalPages}</span>
+          {page < totalPages && <button onClick={() => setPage(page + 1)}>Sau &raquo;</button>}
         </div>
       </main>
     </div>

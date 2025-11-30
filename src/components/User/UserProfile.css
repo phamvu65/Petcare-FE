@@ -1,0 +1,438 @@
+/* --- Biến màu cục bộ --- */
+:root {
+  --primary-color: #284DB7;
+  --primary-dark: #1c3685;
+  --primary-light: #eef2ff;
+  --text-main: #333;
+  --text-secondary: #666;
+  --bg-page: #f8f9fa;
+  --border-color: #e0e0e0;
+  --success-color: #2ecc71;
+  --warning-color: #f1c40f;
+  --danger-color: #e74c3c;
+  --info-color: #3498db;
+}
+
+/* --- Container Chung --- */
+.profile-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  gap: 30px;
+  min-height: 80vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- 1. SIDEBAR --- */
+.profile-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 30px 20px;
+  height: fit-content;
+}
+
+/* Avatar & Brief Info */
+.user-brief {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 32px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(40, 77, 183, 0.3);
+}
+
+.brief-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.brief-info p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Menu Tabs */
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-menu button {
+  background: none;
+  border: none;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-menu button i {
+  width: 20px;
+  text-align: center;
+}
+
+.profile-menu button:hover {
+  background-color: #f5f7fa;
+  color: var(--primary-color);
+}
+
+.profile-menu button.active {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* --- 2. CONTENT AREA --- */
+.profile-content {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 30px;
+}
+
+.tab-title {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  color: var(--text-main);
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 15px;
+}
+
+/* INFO TAB Style */
+.info-card {
+  margin-bottom: 30px;
+}
+
+.info-row {
+  display: flex;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row label {
+  width: 150px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.info-row span {
+  flex: 1;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+/* --- BUTTON STYLES (Sửa lỗi hiển thị) --- */
+.btn-primary, .btn-secondary, .btn-save, .btn-cancel {
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+/* SỬA LẠI: Bắt buộc Nền Xanh + Chữ Trắng bằng !important */
+.btn-primary, .btn-save {
+  background-color: var(--primary-color) !important; /* Quan trọng: Ép nền xanh */
+  color: #ffffff !important; /* Quan trọng: Ép chữ trắng */
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: 0 2px 6px rgba(40, 77, 183, 0.3);
+}
+
+.btn-primary:hover, .btn-save:hover {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(40, 77, 183, 0.4);
+}
+
+/* Nút phụ: Nền xám, Chữ đen */
+.btn-secondary, .btn-cancel {
+  background-color: #f5f5f5 !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.btn-secondary:hover, .btn-cancel:hover {
+  background-color: #e0e0e0 !important;
+  border-color: #ccc !important;
+  color: #000 !important;
+}
+
+/* ORDERS TAB Style */
+/* Filter Tabs */
+.order-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  overflow-x: auto;
+  padding-bottom: 5px; /* Cho thanh cuộn nếu có */
+}
+
+.filter-btn {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+/* Order List */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border-color: var(--primary-color);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.order-id {
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.order-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.order-body {
+  margin-bottom: 15px;
+}
+
+.order-item-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.order-total strong {
+  font-size: 1.1rem;
+  color: var(--danger-color); /* Màu đỏ cho tổng tiền */
+}
+
+.btn-cancel-order {
+  background-color: transparent;
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-cancel-order:hover {
+  background-color: var(--danger-color);
+  color: #fff;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.badge-default { background: #eee; color: #555; }
+.badge-warning { background: #fff3cd; color: #856404; } /* Chờ xác nhận */
+.badge-success { background: #d4edda; color: #155724; } /* Hoàn thành/Đã thanh toán */
+.badge-info    { background: #d1ecf1; color: #0c5460; } /* Đang giao */
+.badge-danger  { background: #f8d7da; color: #721c24; } /* Đã hủy */
+
+/* --- 3. MODALS --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: slideDown 0.3s ease;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(40, 77, 183, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+/* Animations & Loading */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-loading, .profile-error {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.1rem;
+}
+
+.profile-error { color: var(--danger-color); }
+.empty-orders { text-align: center; padding: 40px; color: var(--text-secondary); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .profile-sidebar {
+    width: 100%;
+  }
+  
+  .profile-content {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .info-row label {
+    width: 100%;
+  }
+
+  .order-filters {
+    padding-bottom: 10px;
+  }
+}

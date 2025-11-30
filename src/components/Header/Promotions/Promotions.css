@@ -1,0 +1,239 @@
+/* --- Biến màu cục bộ cho trang Promotion --- */
+:root {
+  --primary-color: #284DB7;
+  --primary-dark: #1c3685;
+  --primary-light-bg: #eef2ff; /* Màu nền nhạt cho coupon */
+  --accent-color: #ff4757;
+  --text-main: #333;
+  --text-gray: #666;
+  --bg-page: #f8f9fa; /* Màu nền tổng thể trang web */
+  --ticket-bg: #ffffff;
+}
+
+/* --- Container Chính --- */
+.promo-container {
+  background-color: var(--bg-page);
+  min-height: 100vh;
+  padding-bottom: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Banner Header --- */
+.promo-banner {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(40, 77, 183, 0.2);
+}
+
+.promo-banner h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+.promo-banner p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* --- Grid Layout (Lưới chứa coupon) --- */
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- Trạng thái trống --- */
+.empty-coupon {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  color: var(--text-gray);
+}
+
+/* --- Coupon Ticket Style (Quan trọng) --- */
+.coupon-ticket {
+  background-color: var(--ticket-bg);
+  border-radius: 12px;
+  display: flex;
+  position: relative;
+  overflow: hidden; /* Để bo góc hoạt động tốt */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 140px; /* Chiều cao cố định để đồng bộ */
+}
+
+.coupon-ticket:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(40, 77, 183, 0.15);
+}
+
+/* --- Phần Trái (Giá trị giảm) --- */
+.coupon-left {
+  background-color: var(--primary-color); /* Nền xanh */
+  color: #fff;
+  width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px dashed rgba(255, 255, 255, 0.3); /* Đường cắt đứt nét */
+  position: relative;
+  flex-shrink: 0;
+}
+
+.coupon-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.coupon-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 5px;
+  opacity: 0.9;
+}
+
+/* --- Phần Phải (Thông tin) --- */
+.coupon-right {
+  flex: 1;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  position: relative; /* Quan trọng để định vị nút Copy */
+}
+
+.coupon-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 5px; /* Tránh chữ sát mép */
+}
+
+.coupon-code {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.coupon-desc {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.3;
+  /* Giới hạn 2 dòng cho mô tả dài */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 25px; /* Tạo khoảng trống để không đè lên nút button */
+}
+
+.coupon-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 0;
+  margin-top: auto; /* Đẩy ngày xuống dưới nếu còn chỗ trống */
+}
+
+/* --- Nút Copy (Đã sửa lại vị trí) --- */
+.btn-copy {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: #fff;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 6px 16px;
+  border-radius: 4px; /* Bo góc vuông hơn một chút cho hiện đại */
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2; /* Đảm bảo nút luôn nổi trên */
+}
+
+.btn-copy:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(40, 77, 183, 0.3);
+}
+
+.btn-copy:active {
+  transform: scale(0.95);
+}
+
+/* --- Trang trí hình tròn cắt (Ticket Cutouts) --- */
+/* Tạo hiệu ứng khuyết ở giữa coupon */
+.circle-top,
+.circle-bottom {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bg-page); /* Phải trùng màu nền trang */
+  border-radius: 50%;
+  left: 100px; /* Canh chỉnh vị trí cắt ngay đường biên trái/phải */
+  z-index: 10;
+}
+
+.circle-top {
+  top: -10px;
+}
+
+.circle-bottom {
+  bottom: -10px;
+}
+
+/* --- Responsive Mobile --- */
+@media (max-width: 480px) {
+  .coupon-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .coupon-ticket {
+    height: auto;
+    flex-direction: column;
+    min-height: 160px; /* Tăng chiều cao tối thiểu trên mobile */
+  }
+  
+  .coupon-left {
+    width: 100%;
+    height: 60px;
+    border-right: none;
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .coupon-value {
+    font-size: 1.5rem;
+  }
+  
+  .coupon-right {
+    padding-bottom: 50px; /* Dành chỗ cho nút copy trên mobile */
+  }
+
+  .circle-top, .circle-bottom {
+    display: none; /* Ẩn vết cắt trên mobile cho đơn giản */
+  }
+  
+  .btn-copy {
+    bottom: 15px;
+    right: 15px;
+    width: auto;
+  }
+}

@@ -1,0 +1,273 @@
+/* --- SCOPED STYLES FOR MY PETS PAGE --- */
+/* Chỉ áp dụng style bên trong class .my-pets-container */
+
+.my-pets-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Header */
+.my-pets-container .pets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.my-pets-container .pets-header h2 {
+    color: #333;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+/* Button Add */
+.my-pets-container .btn-add {
+    background-color: #ff8e4b;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 142, 75, 0.3);
+}
+
+.my-pets-container .btn-add:hover {
+    background-color: #e67e3f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 142, 75, 0.4);
+}
+
+/* Grid Layout */
+.my-pets-container .pet-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Card to hơn xíu */
+    gap: 25px;
+}
+
+/* Pet Card */
+.my-pets-container .pet-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-pets-container .pet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.my-pets-container .pet-avatar {
+    width: 100%;
+    height: 200px;
+    background-color: #fff9f0; /* Màu nền nhẹ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.my-pets-container .pet-avatar img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.my-pets-container .pet-card:hover .pet-avatar img {
+    transform: scale(1.05);
+}
+
+.my-pets-container .pet-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.my-pets-container .pet-info h3 {
+    margin: 0 0 10px 0;
+    color: #ff8e4b;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.my-pets-container .pet-info p {
+    margin: 6px 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Actions Buttons */
+.my-pets-container .pet-actions {
+    margin-top: auto;
+    padding-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.my-pets-container .btn-history,
+.my-pets-container .btn-edit,
+.my-pets-container .btn-delete {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.my-pets-container .btn-history {
+    width: 100%;
+    background-color: #8e44ad;
+    color: white;
+    margin-bottom: 5px;
+}
+.my-pets-container .btn-history:hover { background-color: #732d91; }
+
+.my-pets-container .btn-edit {
+    flex: 1;
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+.my-pets-container .btn-edit:hover { background-color: #bbdefb; }
+
+.my-pets-container .btn-delete {
+    flex: 1;
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+.my-pets-container .btn-delete:hover { background-color: #ffcdd2; }
+
+/* --- MODAL POPUP --- */
+.my-pets-container .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.my-pets-container .modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Fix lỗi form input bị tràn */
+.my-pets-container .form-group {
+    margin-bottom: 15px;
+}
+
+/* QUAN TRỌNG: Chỉ tác động input bên trong my-pets-container */
+.my-pets-container label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #444;
+}
+
+.my-pets-container input[type="text"],
+.my-pets-container input[type="number"],
+.my-pets-container input[type="date"],
+.my-pets-container select,
+.my-pets-container textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box; /* Quan trọng */
+}
+
+.my-pets-container input:focus,
+.my-pets-container select:focus {
+    outline: none;
+    border-color: #ff8e4b;
+    box-shadow: 0 0 0 3px rgba(255, 142, 75, 0.1);
+}
+
+.my-pets-container .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.my-pets-container .btn-cancel {
+    background: #f5f5f5;
+    color: #666;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.my-pets-container .btn-submit {
+    background: #ff8e4b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* History Table */
+.my-pets-container .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+.my-pets-container .history-table th {
+    background: #f9f9f9;
+    padding: 12px;
+    text-align: left;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 2px solid #eee;
+}
+.my-pets-container .history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+.my-pets-container .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
