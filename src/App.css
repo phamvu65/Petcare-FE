@@ -1,34 +1,88 @@
-/* Reset chung */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* App.css */
 
-/* Bọc toàn bộ app */
 .app-wrapper {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Nội dung chính */
 .main-content {
-  flex: 1;
+  padding: 40px 20px; /* Padding responsive hơn */
+  min-height: 80vh;
+  max-width: 1900px; /* Rộng hơn chút cho thoáng */
+  margin: 0 auto;
+  width: 100%;
+
+
 }
 
-/* Các hiệu ứng chung */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+/* === CARD STYLE (Hiện đại, bóng nhẹ) === */
+.neo-card { /* Tên class cũ, style mới */
+  background: white;
+  border: none; /* Bỏ viền đen */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.neo-card:hover {
+  transform: translateY(-5px); /* Bay nhẹ lên trên */
+  box-shadow: var(--shadow-lg);
+}
+
+/* === BUTTON STYLE (Gradient, Bo tròn) === */
+.neo-btn {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 50px; /* Bo tròn viên thuốc */
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(118, 75, 162, 0.3);
+  transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+
+.neo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow); /* Phát sáng khi hover */
+  filter: brightness(1.1);
+}
+
+.neo-btn:active {
+  transform: translateY(1px);
+}
+
+/* Nút phụ */
+.neo-btn.secondary {
+  background: white;
+  color: #764ba2;
+  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-sm);
+}
+.neo-btn.secondary:hover {
+  border-color: #764ba2;
+  background: #f9fafb;
+}
+
+/* === INPUT STYLE === */
+.neo-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  background: #fff;
+  transition: var(--transition);
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.neo-input:focus {
+  border-color: #764ba2;
+  box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1); /* Hiệu ứng focus ring đẹp */
 }

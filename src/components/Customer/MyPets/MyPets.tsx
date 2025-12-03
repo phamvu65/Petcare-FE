@@ -3,7 +3,7 @@ import api from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import "./MyPets.css";
 
-// 1. Interface cho dữ liệu hiển thị (khớp PetResponse)
+// 1. Interface cho dữ liệu hiển thị
 interface Pet {
   id: number;
   owner: string; 
@@ -15,14 +15,14 @@ interface Pet {
   birthDate: string; 
 }
 
-// Interface cho lịch sử dịch vụ (Khớp AppointmentResponse)
+// Interface cho lịch sử dịch vụ
 interface Appointment {
   id: number;
-  petId: number;       // Cần trường này để lọc
+  petId: number;
   petName: string;
   serviceName: string;
   scheduledAt: string;
-  status: string;      // BOOKED, DONE, CANCELLED...
+  status: string;
   totalAmount: number;
 }
 
@@ -118,16 +118,12 @@ const MyPets: React.FC = () => {
     }
   };
 
-  // 🟢 HÀM MỚI: Lấy lịch sử dịch vụ
+  // HÀM MỚI: Lấy lịch sử dịch vụ
   const handleViewHistory = async (pet: Pet) => {
     setSelectedPetName(pet.name);
     try {
-      // Gọi API lấy toàn bộ lịch hẹn của User
       const res = await api.get("/appointments/my");
-      // Dữ liệu API trả về nằm trong res.data.data
       const allAppointments: Appointment[] = res.data.data;
-
-      // Lọc danh sách chỉ lấy của con Pet này
       const petHistory = allAppointments.filter(appt => appt.petId === pet.id);
       
       setHistoryList(petHistory);
@@ -218,134 +214,138 @@ const MyPets: React.FC = () => {
   if (loading) return <div className="loading-text" style={{textAlign:"center", padding:"50px"}}>Đang tải dữ liệu...</div>;
 
   return (
-    <div className="my-pets-container">
-      <div className="pets-header">
-        <h2>🐾 Thú Cưng Của Tôi</h2>
-        <button className="btn-add" onClick={openAddModal}>+ Thêm Thú Cưng</button>
-      </div>
-      
-      {pets.length === 0 ? (
-        <div className="empty-state">
-           <p>Bạn chưa đăng ký thú cưng nào. Hãy thêm ngay để theo dõi sức khỏe nhé!</p>
+    <div className="my-pets-page-wrapper">
+      <div className="my-pets-container">
+        <div className="pets-header-flex">
+          <h2 className="tab-title">🐾 Thú Cưng Của Tôi</h2>
+          <button className="btn-modern primary" onClick={openAddModal}>+ Thêm Thú Cưng</button>
         </div>
-      ) : (
-        <div className="pet-list-grid">
-          {pets.map((pet) => (
-            <div key={pet.id} className="pet-card">
-              <div className="pet-avatar">
-                <img src={getPetImage(pet.species)} alt={pet.name} />
-              </div>
-              <div className="pet-info">
-                <h3>{pet.name}</h3>
-                <p><strong>Loài:</strong> {pet.species} - {pet.breed}</p>
-                <p><strong>Giới tính:</strong> {pet.sex === "male" ? "Đực ♂" : "Cái ♀"}</p>
-                <p><strong>Màu sắc:</strong> {pet.color}</p>
-                <p><strong>Tuổi:</strong> {calculateAge(pet.birthDate)}</p>
-                
-                <div className="pet-actions">
-                  <button className="btn-history" onClick={() => handleViewHistory(pet)}>
-                    📜 Lịch sử
-                  </button>
-                  <button className="btn-edit" onClick={() => openEditModal(pet)}>Sửa</button>
-                  <button className="btn-delete" onClick={() => handleDelete(pet.id)}>Xóa</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* --- MODAL THÊM / SỬA --- */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>{isEditing ? "Cập Nhật Hồ Sơ" : "Thêm Thú Cưng Mới"}</h3>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Tên thú cưng *</label>
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} required placeholder="Ví dụ: Milu" />
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Loại (Species) *</label>
-                  <input type="text" name="species" value={formData.species} onChange={handleInputChange} required placeholder="VD: Chó, Mèo..." />
-                </div>
-                <div className="form-group">
-                  <label>Giống (Breed)</label>
-                  <input type="text" name="breed" value={formData.breed} onChange={handleInputChange} placeholder="VD: Poodle..." />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Giới tính</label>
-                  <select name="sex" value={formData.sex} onChange={handleInputChange}>
-                    <option value="male">Đực</option>
-                    <option value="female">Cái</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Màu lông</label>
-                  <input type="text" name="color" value={formData.color} onChange={handleInputChange} />
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Ngày sinh *</label>
-                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} required />
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Hủy</button>
-                <button type="submit" className="btn-submit">{isEditing ? "Lưu Thay Đổi" : "Thêm Mới"}</button>
-              </div>
-            </form>
+        
+        {pets.length === 0 ? (
+          <div className="empty-state-glass">
+             <p>Bạn chưa đăng ký thú cưng nào. Hãy thêm ngay để theo dõi sức khỏe nhé!</p>
           </div>
-        </div>
-      )}
-
-      {/* --- MODAL LỊCH SỬ DỊCH VỤ --- */}
-      {showHistoryModal && (
-        <div className="modal-overlay">
-          <div className="modal-content history-modal">
-            <button className="close-btn" onClick={() => setShowHistoryModal(false)}>✕</button>
-            <h3>Lịch sử dịch vụ: {selectedPetName}</h3>
-            
-            <div className="history-list">
-              {historyList.length === 0 ? (
-                <div className="empty-state" style={{border: 'none', padding: '20px'}}>
-                  <p>Chưa có dịch vụ nào được thực hiện.</p>
+        ) : (
+          <div className="pet-list-grid">
+            {pets.map((pet) => (
+              <div key={pet.id} className="pet-card glass-card">
+                <div className="pet-avatar-wrapper">
+                  <img src={getPetImage(pet.species)} alt={pet.name} />
                 </div>
-              ) : (
-                <table className="history-table">
-                  <thead>
-                    <tr>
-                      <th>Dịch vụ</th>
-                      <th>Ngày thực hiện</th>
-                      <th>Trạng thái</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {historyList.map(appt => (
-                      <tr key={appt.id}>
-                        <td>{appt.serviceName || "Dịch vụ spa/khám"}</td>
-                        <td>{formatDateTime(appt.scheduledAt)}</td>
-                        <td>
-                          <span 
-                            style={{
-                              backgroundColor: getStatusColor(appt.status),
-                              color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold'
-                            }}
-                          >
-                            {appt.status}
-                          </span>
-                        </td>
+                <div className="pet-info">
+                  <h3>{pet.name}</h3>
+                  <div className="pet-details">
+                      <p><strong>Loài:</strong> {pet.species} - {pet.breed}</p>
+                      <p><strong>Giới tính:</strong> {pet.sex === "male" ? "Đực ♂" : "Cái ♀"}</p>
+                      <p><strong>Màu sắc:</strong> {pet.color}</p>
+                      <p><strong>Tuổi:</strong> {calculateAge(pet.birthDate)}</p>
+                  </div>
+                  
+                  <div className="pet-actions">
+                    <button className="btn-modern secondary small" onClick={() => handleViewHistory(pet)}>
+                      📜 Lịch sử
+                    </button>
+                    <button className="btn-modern secondary small" onClick={() => openEditModal(pet)}>Sửa</button>
+                    <button className="btn-modern delete small" onClick={() => handleDelete(pet.id)}>Xóa</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* --- MODAL THÊM / SỬA --- */}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content glass-modal">
+              <h3>{isEditing ? "Cập Nhật Hồ Sơ" : "Thêm Thú Cưng Mới"}</h3>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label>Tên thú cưng *</label>
+                  <input className="neo-input" type="text" name="name" value={formData.name} onChange={handleInputChange} required placeholder="Ví dụ: Milu" />
+                </div>
+                <div className="form-row-2">
+                  <div className="form-group">
+                    <label>Loại (Species) *</label>
+                    <input className="neo-input" type="text" name="species" value={formData.species} onChange={handleInputChange} required placeholder="VD: Chó, Mèo..." />
+                  </div>
+                  <div className="form-group">
+                    <label>Giống (Breed)</label>
+                    <input className="neo-input" type="text" name="breed" value={formData.breed} onChange={handleInputChange} placeholder="VD: Poodle..." />
+                  </div>
+                </div>
+                <div className="form-row-2">
+                  <div className="form-group">
+                    <label>Giới tính</label>
+                    <select className="neo-input" name="sex" value={formData.sex} onChange={handleInputChange}>
+                      <option value="male">Đực</option>
+                      <option value="female">Cái</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Màu lông</label>
+                    <input className="neo-input" type="text" name="color" value={formData.color} onChange={handleInputChange} />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Ngày sinh *</label>
+                  <input className="neo-input" type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} required />
+                </div>
+                <div className="modal-actions">
+                  <button type="button" className="btn-modern secondary" onClick={() => setShowModal(false)}>Hủy</button>
+                  <button type="submit" className="btn-modern primary">{isEditing ? "Lưu Thay Đổi" : "Thêm Mới"}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* --- MODAL LỊCH SỬ DỊCH VỤ --- */}
+        {showHistoryModal && (
+          <div className="modal-overlay">
+            <div className="modal-content glass-modal history-modal-wide">
+              <button className="close-btn-abs" onClick={() => setShowHistoryModal(false)}>✕</button>
+              <h3 className="history-title">Lịch sử dịch vụ: <span className="highlight-text">{selectedPetName}</span></h3>
+              
+              <div className="history-list-scroll">
+                {historyList.length === 0 ? (
+                  <div className="empty-state-simple">
+                    <p>Chưa có dịch vụ nào được thực hiện.</p>
+                  </div>
+                ) : (
+                  <table className="glass-table">
+                    <thead>
+                      <tr>
+                        <th>Dịch vụ</th>
+                        <th>Ngày thực hiện</th>
+                        <th>Trạng thái</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                    </thead>
+                    <tbody>
+                      {historyList.map(appt => (
+                        <tr key={appt.id}>
+                          <td>{appt.serviceName || "Dịch vụ spa/khám"}</td>
+                          <td>{formatDateTime(appt.scheduledAt)}</td>
+                          <td>
+                            <span 
+                              className="status-pill"
+                              style={{
+                                backgroundColor: getStatusColor(appt.status),
+                              }}
+                            >
+                              {appt.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -36,9 +36,8 @@ const Customer: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("id:desc");
   
-  // State Modal & Rating
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [calculatedRating, setCalculatedRating] = useState({ avg: 0, count: 0 }); // 🟢 State lưu rating tính toán
+  const [calculatedRating, setCalculatedRating] = useState({ avg: 0, count: 0 }); 
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -102,7 +101,6 @@ const Customer: React.FC = () => {
 
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sort, selectedCategories, searchParams]);
 
   const handleCategoryChange = (id: number) => {
@@ -129,20 +127,19 @@ const Customer: React.FC = () => {
 
   const openProductDetail = (product: Product) => {
       setSelectedProduct(product);
-      setCalculatedRating({ avg: 0, count: 0 }); // Reset rating khi mở modal mới
+      setCalculatedRating({ avg: 0, count: 0 }); 
   };
   const closeProductDetail = () => setSelectedProduct(null);
   const formatCurrency = (val: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
 
-  // 🟢 Hàm vẽ sao (cho Modal)
   const renderStars = (avg: number) => {
       const rounded = Math.round(avg);
       return (
-          <div style={{color: '#ffc107', fontSize: '1.2rem', margin: '5px 0'}}>
+          <div style={{color: '#fbbf24', fontSize: '1.2rem', margin: '10px 0', textShadow: '0 0 2px rgba(251, 191, 36, 0.5)'}}>
               {[1,2,3,4,5].map(s => (
                   <span key={s}>{s <= rounded ? '★' : '☆'}</span>
               ))}
-              <span style={{color: '#666', fontSize: '0.9rem', marginLeft: 8}}>
+              <span style={{color: '#6b7280', fontSize: '0.9rem', marginLeft: 8, fontWeight: 500}}>
                   ({calculatedRating.count} đánh giá)
               </span>
           </div>
@@ -150,111 +147,130 @@ const Customer: React.FC = () => {
   };
 
   return (
-    <div className="customer-page">
-      <aside className="customer-sidebar">
-        <h3 className="sidebar-title">Danh Mục</h3>
-        <ul className="category-list">
-          {categories.map((cat) => (
-            <li key={cat.id} className="category-item">
-              <label>
-                <input type="checkbox" checked={selectedCategories.includes(cat.id)} onChange={() => handleCategoryChange(cat.id)}/>
-                {cat.name}
-              </label>
-            </li>
-          ))}
-        </ul>
-        <button className="filter-btn" onClick={handleFilter}>Lọc</button>
-      </aside>
+    <div className="customer-page-wrapper">
+      <div className="customer-container">
+        {/* SIDEBAR */}
+        <aside className="customer-sidebar glass-panel">
+            <h3 className="sidebar-title">Danh Mục</h3>
+            <ul className="category-list">
+            {categories.map((cat) => (
+                <li key={cat.id} className="category-item">
+                <label className="custom-checkbox">
+                    <input type="checkbox" checked={selectedCategories.includes(cat.id)} onChange={() => handleCategoryChange(cat.id)}/>
+                    <span className="checkmark"></span>
+                    <span className="cat-name">{cat.name}</span>
+                </label>
+                </li>
+            ))}
+            </ul>
+            <button className="btn-modern primary full-width" onClick={handleFilter}>Áp Dụng Lọc</button>
+        </aside>
 
-      <main className="customer-content">
-        <div className="customer-content-header">
-          <h2>{searchParams.get("search") ? `Kết quả tìm kiếm: "${searchParams.get("search")}"` : "Tất cả sản phẩm"}</h2>
-          <div className="content-controls">
-            <select className="sort-select" value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="id:desc">Mới nhất</option>
-              <option value="price:asc">Giá tăng dần</option>
-              <option value="price:desc">Giá giảm dần</option>
-            </select>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="loading">Đang tải sản phẩm...</div>
-        ) : products.length === 0 ? (
-          <div className="empty-state" style={{textAlign:'center', padding: 50, color: '#888'}}>
-             <p>Không tìm thấy sản phẩm nào phù hợp.</p>
-             <button onClick={() => { setPage(1); setSelectedCategories([]); navigate("/customer"); }} style={{marginTop:10, padding:'8px 15px', cursor:'pointer'}}>Xem tất cả</button>
-          </div>
-        ) : (
-          <div className="product-grid">
-            {products.map((p) => {
-              const firstImageUrl = p.images && p.images.length > 0 ? p.images[0].imageUrl : undefined;
-              return (
-                <div className="product-card" key={p.id}>
-                  <div className="product-image-wrap">
-                    <div className="img-clickable" onClick={() => openProductDetail(p)} style={{cursor: 'pointer'}}>
-                        {firstImageUrl ? <img src={firstImageUrl} alt={p.name} /> : <div className="product-image-placeholder">No Image</div>}
-                    </div>
-                    <div className="product-actions-overlay">
-                        <button className="action-btn btn-buy-now" onClick={() => handleBuyNow(p)}>Mua Ngay</button>
-                        <button className="action-btn btn-add-cart" onClick={() => handleAddToCart(p)}>Thêm vào giỏ</button>
-                    </div>
-                  </div>
-
-                  <div className="product-info">
-                    <div className="product-brand">{p.categoryName || "PetCare"}</div>
-                    
-                    <div className="product-name" title={p.name} onClick={() => openProductDetail(p)} style={{cursor: 'pointer'}}>
-                        {p.name}
-                    </div>
-                    {/* ĐÃ XÓA HIỂN THỊ SAO Ở ĐÂY THEO YÊU CẦU */}
-                    <div className="product-price-wrap">
-                      <span className="product-price">{formatCurrency(p.price)}</span>
-                    </div>
-                  </div>
+        {/* MAIN CONTENT */}
+        <main className="customer-content">
+            <div className="customer-content-header glass-panel">
+                <h2 className="page-title">{searchParams.get("search") ? `Kết quả: "${searchParams.get("search")}"` : "Tất cả sản phẩm"}</h2>
+                <div className="content-controls">
+                    <select className="neo-select" value={sort} onChange={(e) => setSort(e.target.value)}>
+                    <option value="id:desc">Mới nhất</option>
+                    <option value="price:asc">Giá tăng dần</option>
+                    <option value="price:desc">Giá giảm dần</option>
+                    </select>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {products.length > 0 && (
-            <div className="pagination">
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)} className={page <= 1 ? "disabled" : ""}>&laquo; Trước</button>
-            <span>Trang {page}/{totalPages}</span>
-            <button disabled={page >= totalPages} onClick={() => setPage(page + 1)} className={page >= totalPages ? "disabled" : ""}>Sau &raquo;</button>
             </div>
-        )}
-      </main>
 
-      {/* 🟢 MODAL CHI TIẾT */}
+            {loading ? (
+            <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Đang tải sản phẩm...</p>
+            </div>
+            ) : products.length === 0 ? (
+            <div className="empty-state-glass">
+                <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+                <button className="btn-modern secondary" onClick={() => { setPage(1); setSelectedCategories([]); navigate("/customer"); }}>Xem tất cả</button>
+            </div>
+            ) : (
+            <div className="product-grid">
+                {products.map((p) => {
+                const firstImageUrl = p.images && p.images.length > 0 ? p.images[0].imageUrl : undefined;
+                return (
+                    <div className="product-card glass-card" key={p.id}>
+                        {/* 1. ẢNH SẢN PHẨM (Không còn nút đè lên) */}
+                        <div className="product-image-wrap">
+                            <div className="img-clickable" onClick={() => openProductDetail(p)}>
+                                {firstImageUrl ? <img src={firstImageUrl} alt={p.name} /> : <div className="product-image-placeholder">No Image</div>}
+                            </div>
+                        </div>
+
+                        {/* 2. THÔNG TIN SẢN PHẨM */}
+                        <div className="product-info">
+                            <div className="product-brand">{p.categoryName || "PetCare"}</div>
+                            <div className="product-name" title={p.name} onClick={() => openProductDetail(p)}>{p.name}</div>
+                            <div className="product-price-wrap">
+                                <span className="product-price">{formatCurrency(p.price)}</span>
+                            </div>
+                        </div>
+
+                        {/* 3. FOOTER MỚI: 3 NÚT TRÒN NẰM Ở ĐÂY */}
+                        <div className="product-card-bottom-actions">
+                            <button className="action-btn-icon" data-tooltip="Mua ngay" onClick={() => handleBuyNow(p)}>
+                                <i className="fas fa-credit-card"></i>
+                            </button>
+                            <button className="action-btn-icon" data-tooltip="Thêm vào giỏ" onClick={() => handleAddToCart(p)}>
+                                <i className="fas fa-cart-plus"></i>
+                            </button>
+                            <button className="action-btn-icon" data-tooltip="Xem chi tiết" onClick={() => openProductDetail(p)}>
+                                <i className="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                );
+                })}
+            </div>
+            )}
+
+            {/* Pagination */}
+            {products.length > 0 && (
+                <div className="pagination-glass">
+                <button disabled={page <= 1} onClick={() => setPage(page - 1)} className={`page-btn ${page <= 1 ? "disabled" : ""}`}>&laquo; Trước</button>
+                <span className="page-info">Trang {page} / {totalPages}</span>
+                <button disabled={page >= totalPages} onClick={() => setPage(page + 1)} className={`page-btn ${page >= totalPages ? "disabled" : ""}`}>Sau &raquo;</button>
+                </div>
+            )}
+        </main>
+      </div>
+
+      {/* MODAL CHI TIẾT */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={closeProductDetail}>
-          <div className="modal-content product-detail-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={closeProductDetail}>×</button>
-            
+          <div className="modal-content glass-modal product-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn-abs" onClick={closeProductDetail}>×</button>
             <div className="detail-layout">
                 <div className="detail-left">
-                     <img src={selectedProduct.images?.[0]?.imageUrl || "https://placehold.co/300"} alt={selectedProduct.name} className="detail-img"/>
+                    <div className="detail-img-wrapper">
+                        <img src={selectedProduct.images?.[0]?.imageUrl || "https://placehold.co/300"} alt={selectedProduct.name} className="detail-img"/>
+                    </div>
                 </div>
                 <div className="detail-right">
-                    <h2>{selectedProduct.name}</h2>
-                    
-                    {/* 🟢 HIỂN THỊ SỐ SAO ĐƯỢC TÍNH TOÁN */}
+                    <span className="detail-category">{selectedProduct.categoryName || "Sản phẩm"}</span>
+                    <h2 className="detail-title">{selectedProduct.name}</h2>
                     {renderStars(calculatedRating.avg)}
-
                     <p className="detail-price">{formatCurrency(selectedProduct.price)}</p>
-                    <p className="detail-desc">{selectedProduct.description || "Chưa có mô tả chi tiết."}</p>
+                    <div className="detail-desc-box">
+                        <p>{selectedProduct.description || "Chưa có mô tả chi tiết cho sản phẩm này."}</p>
+                    </div>
                     <div className="detail-actions">
-                        <button className="btn-buy-now" onClick={() => { handleBuyNow(selectedProduct); closeProductDetail(); }}>Mua Ngay</button>
-                        <button className="btn-add-cart" onClick={() => handleAddToCart(selectedProduct)}>Thêm Giỏ Hàng</button>
+                        <button className="btn-modern primary" onClick={() => { handleBuyNow(selectedProduct); closeProductDetail(); }}>
+                            <i className="fas fa-credit-card"></i> Mua Ngay
+                        </button>
+                        <button className="btn-modern secondary" onClick={() => handleAddToCart(selectedProduct)}>
+                            <i className="fas fa-cart-plus"></i> Thêm Giỏ Hàng
+                        </button>
                     </div>
                 </div>
             </div>
-            <hr style={{margin: '20px 0', border: '0', borderTop: '1px solid #eee'}} />
-            
-            {/* 🟢 TRUYỀN CALLBACK XUỐNG ĐỂ LẤY SỐ LIỆU */}
-            <div className="detail-reviews">
+            <div className="detail-reviews-section">
+                <h3 className="review-heading">Đánh giá & Nhận xét</h3>
                 <ReviewSection 
                     productId={selectedProduct.id} 
                     onStatsUpdate={(avg, count) => setCalculatedRating({ avg, count })}

@@ -1,10 +1,10 @@
-import React, { useState } from "react"; // Thêm useState
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
-import "./App.css";
-import "./index.css";
+import "./App.css"; // Chứa các class .app-wrapper, .main-content
+import "./index.css"; // Chứa biến màu và reset CSS Neo-Brutalism
 
-// Import các trang Customer
+// --- Import các trang Customer ---
 import Customer from "./components/Customer/Customer";
 import UserProfile from "./components/User/UserProfile";
 import Register from "./components/Register/Register";
@@ -14,12 +14,13 @@ import Checkout from "./components/Customer/Checkout/Checkout";
 import Cart from "./components/Customer/Cart/Cart";
 import Booking from "./components/Customer/Booking/Booking";
 import Footer from "./components/Footer/Footer";
+import PaymentCallback from "./components/Customer/Checkout/PaymentCallback";
 
-// Import các trang Layout
+// --- Import các trang Layout ---
 import Staff from "./components/Staff/Staff"; 
 import Admin from "./components/Admin/Admin"; 
 
-// Import các component Admin/Staff
+// --- Import các component Admin/Staff ---
 import Dashboard from "./components/Admin/Dashboard/Dashboard";
 import Revenue from "./components/Admin/Revenue/Revenue";
 import OrderDetail from "./components/Admin/OrderDetail/OrderDetail";
@@ -33,7 +34,7 @@ import CouponManagement from "./components/Admin/CouponManagement/CouponManageme
 
 // --- Import Chat ---
 import ChatWidget from "./components/ChatWidget/ChatWidget"; 
-import ContactButtons from "./components/ChatWidget/ContactButtons"; // <--- IMPORT COMPONENT MỚI TẠO
+import ContactButtons from "./components/ChatWidget/ContactButtons";
 
 const MainLayout: React.FC = () => {
   // Tạo state để quản lý việc Bật/Tắt khung chat
@@ -46,9 +47,14 @@ const MainLayout: React.FC = () => {
   return (
     <div className="app-wrapper">
       <Header />
-      <div className="main-content" style={{ padding: "24px 40px", minHeight: "80vh" }}>
+      
+      {/* CẬP NHẬT: Đã bỏ style inline. 
+         Class .main-content trong App.css sẽ lo phần padding và max-width 
+      */}
+      <div className="main-content">
         <Outlet />
       </div>
+      
       <Footer />
       
       {/* --- PHẦN LOGIC CHAT & ZALO --- */}
@@ -57,8 +63,8 @@ const MainLayout: React.FC = () => {
       {isChatOpen && (
         <div style={{ 
             position: 'fixed', 
-            bottom: '70px', // Cao hơn nút bấm một chút
-            right: '100px', 
+            bottom: '90px', // Đẩy cao lên một chút để tách biệt khỏi nút bấm
+            right: '130px',  // Căn lề phải chuẩn theo phong cách gọn gàng
             zIndex: 1999 
         }}>
            <ChatWidget />
@@ -90,6 +96,7 @@ const App: React.FC = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/payment-result" element={<PaymentCallback />} />
         </Route>
 
         {/* === NHÓM 2: ADMIN (Không có Chat Widget) === */}

@@ -64,7 +64,7 @@ const Header: React.FC = () => {
     };
   }, [currentUserName]); 
 
-  // --- HANDLERS ---
+  // --- HANDLERS (LOGIC GỐC) ---
   const handleUserButtonClick = () => {
     if (!currentUserName) {
       setShowLogin(true);
@@ -122,6 +122,7 @@ const Header: React.FC = () => {
             {/* SEARCH BOX */}
             <div className="search-box">
               <input 
+                className="neo-input search-input"
                 type="text" 
                 placeholder="Bạn đang tìm gì cho thú cưng..." 
                 value={keyword}
@@ -136,18 +137,18 @@ const Header: React.FC = () => {
             {/* HEADER RIGHT ACTIONS */}
             <div className="header-right">
               <div className="hotline">
-                <span className="hotline-title">Tư vấn miễn phí</span>
                 <span className="hotline-number">083.223.4628</span>
               </div>
 
               <div className="header-icons">
                 {/* User Info */}
                 <div className="user-menu-wrapper">
-                  <button className="icon-item login-btn" onClick={handleUserButtonClick}>
+                  <button className="icon-item login-btn neo-btn secondary" onClick={handleUserButtonClick}>
                     <i className={currentUserName ? "fas fa-user-check" : "far fa-user"} />
-                    <span>{currentUserName ? `Chào, ${currentUserName}` : "Đăng Nhập"}</span>
+                    <span>{currentUserName ? ` ${currentUserName}` : " Đăng Nhập"}</span>
                   </button>
 
+                  {/* KHÔI PHỤC LOGIC HIỂN THỊ MENU */}
                   {currentUserName && userMenuOpen && (
                     <div className="user-dropdown">
                       <button onClick={() => { navigate("/profile"); setUserMenuOpen(false); }}>
@@ -164,9 +165,10 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Cart Info */}
-                <div className="icon-item cart" onClick={handleGoToCart}>
-                  <i className="fas fa-shopping-basket" />
-                  <span>Giỏ Hàng</span>
+                <div className="icon-item cart-wrapper" onClick={handleGoToCart}>
+                  <button className="neo-btn" style={{padding: '0', width:'45px', height:'45px', display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'50%'}}>
+                    <i className="fas fa-shopping-basket" />
+                  </button>
                   {cartCount > 0 && <div className="cart-badge">{cartCount}</div>}
                 </div>
               </div>
@@ -174,7 +176,7 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* NAVIGATION BAR - Đã xóa mục Thức ăn/Quần áo/Đồ chơi */}
+        {/* NAVIGATION BAR */}
         <nav className="header-nav">
           <div className="container">
             <ul className="nav-menu">
@@ -186,9 +188,10 @@ const Header: React.FC = () => {
               
               <li className="has-sub-menu">
                 <Link to="/customer" onClick={handleLinkClick}>
-                  <i className="fas fa-boxes"></i> Sản phẩm <i className="fas fa-chevron-down" style={{fontSize: 12, marginLeft: 5}}></i>
+                  <i className="fas fa-boxes"></i> Sản phẩm <i className="fas fa-chevron-down" style={{fontSize: 10, marginLeft: 5}}></i>
                 </Link>
-                <ul className="sub-menu">
+                {/* Giữ nguyên logic hiển thị sub-menu khi hover */}
+                <ul className="sub-menu neo-dropdown">
                   {categories.length > 0 ? (
                     categories.map((cat) => (
                       <li key={cat.id}>

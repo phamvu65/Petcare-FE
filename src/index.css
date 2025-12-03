@@ -1,55 +1,54 @@
-/* RESET CƠ BẢN CHO TOÀN PROJECT */
+/* index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
+:root {
+  /* Màu sắc Công nghệ & Hiện đại */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Tím xanh trendy */
+  --secondary-gradient: linear-gradient(135deg, #2af598 0%, #009efd 100%); /* Xanh mint tươi mát */
+  --accent-color: #ff6b6b;
+  
+  --bg-color: #f3f4f6;       /* Xám nhạt hiện đại */
+  --text-main: #1f2937;      /* Đen xám dịu mắt */
+  --text-light: #6b7280;
+  
+  /* Hiệu ứng kính & Bóng đổ mềm */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(118, 75, 162, 0.4); /* Hiệu ứng phát sáng nhẹ */
+  
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Chuyển động cực mượt */
 }
 
-/* Body nền xám nhạt, KHÔNG flex, KHÔNG center */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #213547;
-  background-color: #f3f4f6;
-  text-rendering: optimizeLegibility;
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Font chuẩn UI hiện đại */
+  background-color: var(--bg-color);
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Thêm hình nền mờ nhẹ phía sau nếu thích */
+  background-image: radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.46) 0.1%, rgba(233, 226, 226, 0.28) 90.1%);
 }
 
-/* Link mặc định */
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: none;
+/* Scrollbar đẹp */
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-a:hover {
-  color: #535bf2;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-/* Optional: style chung cho button, có thể giữ hoặc bỏ */
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
 }
-
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

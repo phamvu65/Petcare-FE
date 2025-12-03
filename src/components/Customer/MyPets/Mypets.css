@@ -1,273 +1,330 @@
-/* --- SCOPED STYLES FOR MY PETS PAGE --- */
-/* Chỉ áp dụng style bên trong class .my-pets-container */
+/* MyPets.css - Modern Glassmorphism Style */
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text-main: #1f2937;
+  --text-light: #6b7280;
+  --bg-page: #f3f4f6;
+  
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --radius-md: 16px;
+}
+
+/* --- Wrapper nền toàn trang --- */
+.my-pets-page-wrapper {
+  background-color: var(--bg-page);
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(102, 126, 234, 0.1) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(118, 75, 162, 0.1) 0px, transparent 50%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
 
 .my-pets-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Header */
-.my-pets-container .pets-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+/* --- Header --- */
+.pets-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-.my-pets-container .pets-header h2 {
-    color: #333;
-    margin: 0;
-    font-size: 1.8rem;
+.tab-title {
+  margin: 0;
+  font-size: 2rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
 }
 
-/* Button Add */
-.my-pets-container .btn-add {
-    background-color: #ff8e4b;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(255, 142, 75, 0.3);
+/* --- Buttons Modern --- */
+.btn-modern {
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
-.my-pets-container .btn-add:hover {
-    background-color: #e67e3f;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 142, 75, 0.4);
+.btn-modern.primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
 }
 
-/* Grid Layout */
-.my-pets-container .pet-list-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Card to hơn xíu */
-    gap: 25px;
+.btn-modern.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
 }
 
-/* Pet Card */
-.my-pets-container .pet-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #f0f0f0;
-    display: flex;
+.btn-modern.secondary {
+  background: white;
+  color: #764ba2;
+  border: 1px solid rgba(118, 75, 162, 0.2);
+}
+
+.btn-modern.secondary:hover {
+  background: #fdfdfd;
+  border-color: #764ba2;
+  transform: translateY(-1px);
+}
+
+.btn-modern.delete {
+  background: white;
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-modern.delete:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-modern.small {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+/* --- Pet Grid --- */
+.pet-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+/* --- Pet Card (Glass Style) --- */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.pet-avatar-wrapper {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 50%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pet-info h3 {
+  margin: 0 0 15px;
+  font-size: 1.25rem;
+  color: #764ba2;
+  font-weight: 700;
+}
+
+.pet-details {
+  text-align: left;
+  width: 100%;
+  background: rgba(255,255,255,0.5);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.pet-details p {
+  margin: 6px 0;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.pet-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* --- Empty State --- */
+.empty-state-glass {
+  text-align: center;
+  padding: 50px;
+  background: var(--glass-bg);
+  border-radius: 20px;
+  color: var(--text-light);
+  border: 1px dashed rgba(0,0,0,0.1);
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  animation: slideUp 0.3s ease;
+  position: relative;
+}
+
+.glass-modal h3 {
+  text-align: center;
+  color: #764ba2;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+.neo-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+.neo-input:focus {
+  border-color: #764ba2;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
+  outline: none;
+}
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+/* History Modal Specifics */
+.history-modal-wide {
+  max-width: 700px;
+}
+
+.close-btn-abs {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-light);
+}
+.close-btn-abs:hover { color: #ef4444; }
+
+.history-title {
+  font-size: 1.3rem;
+  color: var(--text-main);
+}
+.highlight-text {
+  color: #764ba2;
+  font-weight: 800;
+}
+
+.history-list-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+/* Table Style */
+.glass-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.glass-table th {
+  text-align: left;
+  padding: 12px;
+  color: var(--text-light);
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+.glass-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f9f9f9;
+  color: var(--text-main);
+}
+.status-pill {
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+  .pets-header-flex {
     flex-direction: column;
-}
-
-.my-pets-container .pet-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-}
-
-.my-pets-container .pet-avatar {
-    width: 100%;
-    height: 200px;
-    background-color: #fff9f0; /* Màu nền nhẹ */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.my-pets-container .pet-avatar img {
-    max-width: 70%;
-    max-height: 70%;
-    object-fit: contain;
-    transition: transform 0.3s;
-}
-
-.my-pets-container .pet-card:hover .pet-avatar img {
-    transform: scale(1.05);
-}
-
-.my-pets-container .pet-info {
-    padding: 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.my-pets-container .pet-info h3 {
-    margin: 0 0 10px 0;
-    color: #ff8e4b;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.my-pets-container .pet-info p {
-    margin: 6px 0;
-    color: #555;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-/* Actions Buttons */
-.my-pets-container .pet-actions {
-    margin-top: auto;
-    padding-top: 15px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.my-pets-container .btn-history,
-.my-pets-container .btn-edit,
-.my-pets-container .btn-delete {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-}
-
-.my-pets-container .btn-history {
-    width: 100%;
-    background-color: #8e44ad;
-    color: white;
-    margin-bottom: 5px;
-}
-.my-pets-container .btn-history:hover { background-color: #732d91; }
-
-.my-pets-container .btn-edit {
-    flex: 1;
-    background-color: #e3f2fd;
-    color: #1976d2;
-}
-.my-pets-container .btn-edit:hover { background-color: #bbdefb; }
-
-.my-pets-container .btn-delete {
-    flex: 1;
-    background-color: #ffebee;
-    color: #d32f2f;
-}
-.my-pets-container .btn-delete:hover { background-color: #ffcdd2; }
-
-/* --- MODAL POPUP --- */
-.my-pets-container .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.my-pets-container .modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-}
-
-/* Fix lỗi form input bị tràn */
-.my-pets-container .form-group {
-    margin-bottom: 15px;
-}
-
-/* QUAN TRỌNG: Chỉ tác động input bên trong my-pets-container */
-.my-pets-container label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #444;
-}
-
-.my-pets-container input[type="text"],
-.my-pets-container input[type="number"],
-.my-pets-container input[type="date"],
-.my-pets-container select,
-.my-pets-container textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    box-sizing: border-box; /* Quan trọng */
-}
-
-.my-pets-container input:focus,
-.my-pets-container select:focus {
-    outline: none;
-    border-color: #ff8e4b;
-    box-shadow: 0 0 0 3px rgba(255, 142, 75, 0.1);
-}
-
-.my-pets-container .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.my-pets-container .btn-cancel {
-    background: #f5f5f5;
-    color: #666;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.my-pets-container .btn-submit {
-    background: #ff8e4b;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-/* History Table */
-.my-pets-container .history-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-.my-pets-container .history-table th {
-    background: #f9f9f9;
-    padding: 12px;
-    text-align: left;
-    color: #555;
-    font-weight: 600;
-    border-bottom: 2px solid #eee;
-}
-.my-pets-container .history-table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    color: #333;
-}
-.my-pets-container .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
+    align-items: flex-start;
+  }
 }

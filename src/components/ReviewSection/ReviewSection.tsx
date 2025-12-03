@@ -4,15 +4,16 @@ import "./ReviewSection.css";
 
 interface ReviewResponse {
   id: number;
-  rating: number; // Số sao của đánh giá này
+  rating: number;
   comment: string;
   userFullName: string;
   createdAt: string;
 }
 
-// Thêm prop onStatsUpdate để truyền dữ liệu ngược lên cha
 interface ReviewSectionProps {
   productId: number;
+  // Prop này dùng để báo cho component cha (Modal) biết số sao trung bình 
+  // để hiển thị ngay dưới tên sản phẩm.
   onStatsUpdate?: (avgRating: number, totalReviews: number) => void;
 }
 
@@ -24,21 +25,42 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId, onStatsUpdate 
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Load Reviews
+  // Helper: Lấy chữ cái đầu của tên để làm Avatar
+  const getInitials = (name: string) => {
+    return name ? name.charAt(0).toUpperCase() : "U";
+  };
+
+  // Helper: Render sao
+  const renderStars = (points: number, interactive: boolean = false) => {
+    return (
+      <div className="stars-wrapper">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={`star-icon ${star <= points ? "filled" : ""}`}
+            onClick={() => interactive && setRating(star)}
+            style={{ cursor: interactive ? "pointer" : "default" }}
+          >
+            ★
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   const fetchReviews = async () => {
     try {
-      // Lấy 100 review để tính toán cho chính xác (tạm thời)
+      // Lấy 100 item để tính trung bình sao cho chính xác hơn ở phía Client
       const res = await api.get(`/reviews/product/${productId}`, {
-        params: { page, size: 10 }, 
+        params: { page: page - 1, size: 10 }, // API thường bắt đầu page từ 0
       });
       
       if (res.data && res.data.data) {
         const fetchedReviews: ReviewResponse[] = res.data.data;
         setReviews(fetchedReviews);
         
-        // --- 🟢 TÍNH TOÁN SỐ SAO TRUNG BÌNH TẠI ĐÂY ---
+        // Logic tính toán số sao trung bình để gửi ngược lên cha
         if (onStatsUpdate) {
-            // Lọc ra các review có rating (tránh trường hợp null/undefined)
             const validReviews = fetchedReviews.filter(r => r.rating > 0);
             const totalCount = res.data.pagination ? res.data.pagination.totalElements : validReviews.length;
             
@@ -64,7 +86,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId, onStatsUpdate 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId, page]);
 
-  // Submit Review
   const handleSubmit = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -85,10 +106,10 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId, onStatsUpdate 
       };
       
       await api.post("/reviews/comment", payload);
-      alert("Cảm ơn bạn đã đánh giá!");
       setComment("");
       setRating(5);
-      fetchReviews(); // Reload lại list và tính lại sao
+      fetchReviews(); 
+      alert("Cảm ơn đánh giá của bạn!");
     } catch (error: any) {
       const msg = error.response?.data?.message || "Lỗi khi gửi đánh giá";
       alert(msg);
@@ -97,56 +118,52 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId, onStatsUpdate 
     }
   };
 
-  const renderStars = (points: number, interactive: boolean = false) => {
-    return (
-      <div className="stars">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <span
-            key={star}
-            className={`star ${star <= points ? "filled" : ""}`}
-            onClick={() => interactive && setRating(star)}
-            style={{ cursor: interactive ? "pointer" : "default" }}
-          >
-            ★
-          </span>
-        ))}
-      </div>
-    );
-  };
-
   return (
-    <div className="review-section">
-      <h3>Đánh giá sản phẩm</h3>
-
-      <div className="review-form">
-        <div className="rating-select">
-          <span>Chọn số sao:</span>
-          {renderStars(rating, true)}
+    <div className="review-container">
+      {/* Form viết đánh giá */}
+      <div className="review-input-card">
+        <div className="input-header">
+            <span className="input-label">Đánh giá của bạn:</span>
+            {renderStars(rating, true)}
         </div>
-        <textarea
-          placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <button onClick={handleSubmit} disabled={loading}>
-          {loading ? "Đang gửi..." : "Gửi đánh giá"}
-        </button>
+        <div className="input-body">
+            <textarea
+            className="review-textarea"
+            placeholder="Sản phẩm thế nào? Hãy chia sẻ cảm nhận..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            />
+            <button className="btn-submit-review" onClick={handleSubmit} disabled={loading}>
+                {loading ? <span className="spinner-small"></span> : "Gửi Đánh Giá"}
+            </button>
+        </div>
       </div>
 
-      <hr />
+      <div className="review-divider"></div>
 
+      {/* Danh sách đánh giá */}
       <div className="review-list">
         {reviews.length === 0 ? (
-          <p className="no-reviews">Chưa có đánh giá nào.</p>
+          <div className="no-reviews">
+             <i className="far fa-comment-dots"></i>
+             <p>Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+          </div>
         ) : (
           reviews.map((r) => (
-            <div key={r.id} className="review-item">
-              <div className="review-header">
-                <strong>{r.userFullName || "Khách hàng"}</strong>
-                {renderStars(r.rating)}
+            <div key={r.id} className="review-card">
+              <div className="review-avatar">
+                  {getInitials(r.userFullName)}
               </div>
-              <p className="review-date">{new Date(r.createdAt).toLocaleDateString('vi-VN')}</p>
-              <p className="review-content">{r.comment}</p>
+              <div className="review-content">
+                <div className="review-top-row">
+                    <span className="review-user-name">{r.userFullName || "Khách hàng ẩn danh"}</span>
+                    <span className="review-time">{new Date(r.createdAt).toLocaleDateString('vi-VN')}</span>
+                </div>
+                <div className="review-stars-static">
+                    {renderStars(r.rating)}
+                </div>
+                <p className="review-text">{r.comment}</p>
+              </div>
             </div>
           ))
         )}
@@ -154,9 +171,13 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ productId, onStatsUpdate 
 
       {totalPages > 1 && (
         <div className="review-pagination">
-             <button disabled={page <= 1} onClick={() => setPage(p => p - 1)}>Trước</button>
-             <span>{page} / {totalPages}</span>
-             <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>Sau</button>
+             <button className="pagi-btn" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
+                &laquo;
+             </button>
+             <span className="pagi-info">{page} / {totalPages}</span>
+             <button className="pagi-btn" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
+                &raquo;
+             </button>
         </div>
       )}
     </div>

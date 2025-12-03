@@ -513,3 +513,119 @@
     width: 100%;
   }
 }
+
+/* Container chính - Giao diện thẻ Card */
+.payment-callback-container {
+    max-width: 500px;
+    margin: 80px auto; /* Căn giữa màn hình */
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 16px; /* Bo góc mềm mại */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng tạo chiều sâu */
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Hiệu ứng xuất hiện nhẹ nhàng */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Icon Check xanh lá hoặc X đỏ */
+.payment-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.success-icon {
+    color: #28a745;
+    animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.error-icon {
+    color: #dc3545;
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Animation cho icon nảy lên */
+@keyframes scaleUp {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Tiêu đề */
+.payment-callback-container h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Đoạn văn mô tả */
+.payment-callback-container p {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.sub-text {
+    font-size: 14px;
+    color: #999;
+    margin-top: 20px !important;
+    font-style: italic;
+}
+
+/* --- BUTTON ĐẸP (Phần bạn cần nhất) --- */
+.btn-home, .btn-retry {
+    margin-top: 30px;
+    padding: 12px 35px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px; /* Bo tròn kiểu viên thuốc */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+/* Nút Về Trang Chủ (Màu chủ đạo) */
+.btn-home {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient tím xanh hiện đại */
+    color: white;
+}
+
+.btn-home:hover {
+    transform: translateY(-3px); /* Nổi lên khi di chuột */
+    box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4); /* Bóng đậm hơn */
+}
+
+.btn-home:active {
+    transform: translateY(-1px);
+}
+
+/* Nút Thử Lại (Màu xám/đỏ nhạt) */
+.btn-retry {
+    background-color: #f8f9fa;
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+.btn-retry:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+}

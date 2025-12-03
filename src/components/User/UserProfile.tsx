@@ -26,14 +26,14 @@ interface ChangePasswordForm {
 }
 
 interface OrderDetailItem {
-  id: number; // ID của OrderDetail
-  productId: number; // 🟢 Cần thêm field này từ API để biết đánh giá sản phẩm nào
+  id: number;
+  productId: number;
   productName: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
   image?: string;
-  hasReviewed?: boolean; // (Optional) Nếu backend trả về để ẩn nút đánh giá
+  hasReviewed?: boolean;
 }
 
 interface Order {
@@ -46,10 +46,9 @@ interface Order {
   items: OrderDetailItem[];
 }
 
-// 🟢 Interface cho Form Đánh giá
 interface ReviewForm {
     productId: number;
-    productName: string; // Để hiển thị tên trên modal
+    productName: string;
     rating: number;
     comment: string;
 }
@@ -69,7 +68,7 @@ const UserProfile: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPassModal, setShowPassModal] = useState(false);
   
-  // 🟢 State Modal Đánh giá
+  // State Modal Đánh giá
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewForm, setReviewForm] = useState<ReviewForm>({
       productId: 0,
@@ -148,10 +147,10 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  // --- 🟢 4. XỬ LÝ ĐÁNH GIÁ SẢN PHẨM ---
+  // --- 4. XỬ LÝ ĐÁNH GIÁ SẢN PHẨM ---
   const handleOpenReview = (item: OrderDetailItem) => {
       setReviewForm({
-          productId: item.productId || item.id, // Fallback nếu API chưa có productId riêng
+          productId: item.productId || item.id,
           productName: item.productName,
           rating: 5,
           comment: ""
@@ -175,14 +174,13 @@ const UserProfile: React.FC = () => {
           await api.post("/reviews/comment", payload);
           alert("Cảm ơn bạn đã đánh giá sản phẩm!");
           setShowReviewModal(false);
-          // Có thể reload lại orders nếu muốn cập nhật trạng thái "Đã đánh giá"
       } catch (error: any) {
           const msg = error.response?.data?.message || "Gửi đánh giá thất bại.";
           alert(msg);
       }
   };
 
-  // --- CÁC HÀM UPDATE INFO / PASSWORD (GIỮ NGUYÊN) ---
+  // --- UPDATE INFO / PASSWORD ---
   const handleOpenEdit = () => {
     if (user) {
       setEditForm({ firstName: user.fistName, lastName: user.lastName, email: user.email, phone: user.phone });
@@ -248,176 +246,178 @@ const UserProfile: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div className="profile-container">
-      {/* SIDEBAR (Giữ nguyên) */}
-      <div className="profile-sidebar">
-        <div className="user-brief">
-            <div className="avatar-circle">{user.lastName.charAt(0).toUpperCase()}</div>
-            <div className="brief-info">
-                <h3>{user.fistName} {user.lastName}</h3>
-                <p>@{user.userName}</p>
+    <div className="profile-page-wrapper">
+        <div className="profile-container">
+        {/* SIDEBAR */}
+        <div className="profile-sidebar glass-panel">
+            <div className="user-brief">
+                <div className="avatar-circle">{user.lastName.charAt(0).toUpperCase()}</div>
+                <div className="brief-info">
+                    <h3>{user.fistName} {user.lastName}</h3>
+                    <p>@{user.userName}</p>
+                </div>
+            </div>
+            <div className="profile-menu">
+                <button className={activeTab === 'info' ? 'active' : ''} onClick={() => setActiveTab('info')}>
+                    <i className="far fa-user"></i> Thông tin cá nhân
+                </button>
+                <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>
+                    <i className="fas fa-shopping-bag"></i> Lịch sử đơn hàng
+                </button>
             </div>
         </div>
-        <div className="profile-menu">
-            <button className={activeTab === 'info' ? 'active' : ''} onClick={() => setActiveTab('info')}>
-                <i className="far fa-user"></i> Thông tin cá nhân
-            </button>
-            <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>
-                <i className="fas fa-shopping-bag"></i> Lịch sử đơn hàng
-            </button>
-        </div>
-      </div>
 
-      <div className="profile-content">
-        {/* TAB 1: INFO (Giữ nguyên) */}
-        {activeTab === 'info' && (
-            <div className="info-tab">
-                <h2 className="tab-title">Hồ Sơ Của Tôi</h2>
-                <div className="info-card">
-                    <div className="info-row"><label>Họ tên:</label><span>{user.fistName} {user.lastName}</span></div>
-                    <div className="info-row"><label>Email:</label><span>{user.email}</span></div>
-                    <div className="info-row"><label>SĐT:</label><span>{user.phone || "Chưa cập nhật"}</span></div>
+        <div className="profile-content glass-panel">
+            {/* TAB 1: INFO */}
+            {activeTab === 'info' && (
+                <div className="info-tab">
+                    <h2 className="tab-title">Hồ Sơ Của Tôi</h2>
+                    <div className="info-card">
+                        <div className="info-row"><label>Họ tên:</label><span>{user.fistName} {user.lastName}</span></div>
+                        <div className="info-row"><label>Email:</label><span>{user.email}</span></div>
+                        <div className="info-row"><label>SĐT:</label><span>{user.phone || "Chưa cập nhật"}</span></div>
+                    </div>
+                    <div className="action-buttons">
+                        <button className="btn-modern primary" onClick={handleOpenEdit}>Cập nhật</button>
+                        <button className="btn-modern secondary" onClick={() => setShowPassModal(true)}>Đổi mật khẩu</button>
+                    </div>
                 </div>
-                <div className="action-buttons">
-                    <button className="btn-primary" onClick={handleOpenEdit}>Cập nhật</button>
-                    <button className="btn-secondary" onClick={() => setShowPassModal(true)}>Đổi mật khẩu</button>
+            )}
+
+            {/* TAB 2: ORDERS */}
+            {activeTab === 'orders' && (
+                <div className="orders-tab">
+                    <h2 className="tab-title">Đơn Hàng Của Tôi</h2>
+                    <div className="order-filters">
+                        {filterTabs.map(tab => (
+                            <button key={tab.key} 
+                                className={`filter-btn ${filterStatus === tab.key ? 'active' : ''}`}
+                                onClick={() => setFilterStatus(tab.key)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {loadingOrders ? <p>Đang tải...</p> : filteredOrders.length === 0 ? (
+                        <div className="empty-orders"><p>Không có đơn hàng nào.</p></div>
+                    ) : (
+                        <div className="order-list">
+                            {filteredOrders.map(order => (
+                                <div key={order.id} className="order-card">
+                                    <div className="order-header">
+                                        <div className="order-id">Đơn hàng #{order.id}</div>
+                                        <div className="order-date">{new Date(order.createdAt).toLocaleDateString('vi-VN')}</div>
+                                        <div className="order-status-wrapper">{getStatusBadge(order.status)}</div>
+                                    </div>
+                                    
+                                    <div className="order-body">
+                                        {order.items && order.items.map((item, idx) => (
+                                            <div key={idx} className="order-item-row">
+                                                <div className="item-info">
+                                                    <span className="item-name">{item.productName}</span>
+                                                    <span className="item-meta">x{item.quantity} | {formatCurrency(item.unitPrice)}</span>
+                                                </div>
+                                                
+                                                {(order.status === 'COMPLETED' || order.status === 'DELIVERED') && (
+                                                    <button 
+                                                        className="btn-review-item"
+                                                        onClick={() => handleOpenReview(item)}
+                                                    >
+                                                        Đánh giá
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="order-footer">
+                                        <div className="order-total">
+                                            Tổng tiền: <strong>{formatCurrency(order.totalAmount)}</strong>
+                                        </div>
+                                        {order.status === 'PENDING' && (
+                                            <button className="btn-cancel-order" onClick={() => handleCancelOrder(order.id)}>Hủy Đơn</button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+
+        {/* MODAL EDIT INFO */}
+        {showEditModal && (
+            <div className="modal-overlay">
+                <div className="modal-content glass-modal">
+                    <h3>Cập nhật thông tin</h3>
+                    <form onSubmit={handleUpdateInfo}>
+                        <div className="form-group"><label>Họ</label><input required value={editForm.firstName} onChange={e => setEditForm({...editForm, firstName: e.target.value})} className="neo-input" /></div>
+                        <div className="form-group"><label>Tên</label><input required value={editForm.lastName} onChange={e => setEditForm({...editForm, lastName: e.target.value})} className="neo-input" /></div>
+                        <div className="form-group"><label>Email</label><input type="email" required value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} className="neo-input" /></div>
+                        <div className="form-group"><label>SĐT</label><input value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value})} className="neo-input" /></div>
+                        <div className="modal-actions">
+                            <button type="button" className="btn-modern secondary" onClick={() => setShowEditModal(false)}>Hủy</button>
+                            <button type="submit" className="btn-modern primary">Lưu</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         )}
 
-        {/* TAB 2: ORDERS */}
-        {activeTab === 'orders' && (
-            <div className="orders-tab">
-                <h2 className="tab-title">Đơn Hàng Của Tôi</h2>
-                <div className="order-filters">
-                    {filterTabs.map(tab => (
-                        <button key={tab.key} 
-                            className={`filter-btn ${filterStatus === tab.key ? 'active' : ''}`}
-                            onClick={() => setFilterStatus(tab.key)}
+        {/* MODAL CHANGE PASSWORD */}
+        {showPassModal && (
+            <div className="modal-overlay">
+                <div className="modal-content glass-modal">
+                    <h3>Đổi mật khẩu</h3>
+                    <form onSubmit={handleChangePassword}>
+                        <div className="form-group"><label>Mật khẩu cũ</label><input type="password" required value={passForm.oldPassword} onChange={e => setPassForm({...passForm, oldPassword: e.target.value})} className="neo-input" /></div>
+                        <div className="form-group"><label>Mật khẩu mới</label><input type="password" required value={passForm.password} onChange={e => setPassForm({...passForm, password: e.target.value})} className="neo-input" /></div>
+                        <div className="form-group"><label>Xác nhận</label><input type="password" required value={passForm.confirmPassword} onChange={e => setPassForm({...passForm, confirmPassword: e.target.value})} className="neo-input" /></div>
+                        <div className="modal-actions">
+                            <button type="button" className="btn-modern secondary" onClick={() => setShowPassModal(false)}>Hủy</button>
+                            <button type="submit" className="btn-modern primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )}
+
+        {/* MODAL REVIEW */}
+        {showReviewModal && (
+            <div className="modal-overlay">
+            <div className="modal-content glass-modal review-modal">
+                <h3>Đánh giá sản phẩm</h3>
+                <p className="review-product-name">{reviewForm.productName}</p>
+                
+                <div className="star-rating-input">
+                    {[1, 2, 3, 4, 5].map(star => (
+                        <span 
+                            key={star} 
+                            className={`star ${star <= reviewForm.rating ? "filled" : ""}`}
+                            onClick={() => setReviewForm({...reviewForm, rating: star})}
                         >
-                            {tab.label}
-                        </button>
+                            ★
+                        </span>
                     ))}
                 </div>
 
-                {loadingOrders ? <p>Đang tải...</p> : filteredOrders.length === 0 ? (
-                    <div className="empty-orders"><p>Không có đơn hàng nào.</p></div>
-                ) : (
-                    <div className="order-list">
-                        {filteredOrders.map(order => (
-                            <div key={order.id} className="order-card">
-                                <div className="order-header">
-                                    <div className="order-id">#{order.id}</div>
-                                    <div className="order-date">{new Date(order.createdAt).toLocaleDateString('vi-VN')}</div>
-                                    <div className="order-status">{getStatusBadge(order.status)}</div>
-                                </div>
-                                
-                                <div className="order-body">
-                                    {order.items && order.items.map((item, idx) => (
-                                        <div key={idx} className="order-item-row">
-                                            <div className="item-info">
-                                                <span className="item-name">{item.productName}</span>
-                                                <span className="item-meta">x{item.quantity} | {formatCurrency(item.unitPrice)}</span>
-                                            </div>
-                                            
-                                            {/* 🟢 NÚT ĐÁNH GIÁ: Chỉ hiện khi Đơn hàng HOÀN THÀNH */}
-                                            {(order.status === 'COMPLETED' || order.status === 'DELIVERED') && (
-                                                <button 
-                                                    className="btn-review-item"
-                                                    onClick={() => handleOpenReview(item)}
-                                                >
-                                                    Đánh giá
-                                                </button>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
+                <textarea 
+                    className="review-textarea neo-input"
+                    placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm này..."
+                    value={reviewForm.comment}
+                    onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
+                />
 
-                                <div className="order-footer">
-                                    <div className="order-total">
-                                        Tổng tiền: <strong>{formatCurrency(order.totalAmount)}</strong>
-                                    </div>
-                                    {order.status === 'PENDING' && (
-                                        <button className="btn-cancel-order" onClick={() => handleCancelOrder(order.id)}>Hủy Đơn</button>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                <div className="modal-actions">
+                <button className="btn-modern secondary" onClick={() => setShowReviewModal(false)}>Đóng</button>
+                <button className="btn-modern primary" onClick={handleSubmitReview}>Gửi Đánh Giá</button>
+                </div>
+            </div>
             </div>
         )}
-      </div>
-
-      {/* MODAL EDIT INFO & PASSWORD (Giữ nguyên, tôi ẩn bớt để gọn code) */}
-      {showEditModal && (
-         <div className="modal-overlay">
-             <div className="modal-content">
-                 <h3>Cập nhật thông tin</h3>
-                 <form onSubmit={handleUpdateInfo}>
-                     <div className="form-group"><label>Họ</label><input required value={editForm.firstName} onChange={e => setEditForm({...editForm, firstName: e.target.value})} /></div>
-                     <div className="form-group"><label>Tên</label><input required value={editForm.lastName} onChange={e => setEditForm({...editForm, lastName: e.target.value})} /></div>
-                     <div className="form-group"><label>Email</label><input type="email" required value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})} /></div>
-                     <div className="form-group"><label>SĐT</label><input value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value})} /></div>
-                     <div className="modal-actions">
-                         <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)}>Hủy</button>
-                         <button type="submit" className="btn-save">Lưu</button>
-                     </div>
-                 </form>
-             </div>
-         </div>
-      )}
-      {showPassModal && (
-          <div className="modal-overlay">
-              <div className="modal-content">
-                  <h3>Đổi mật khẩu</h3>
-                  <form onSubmit={handleChangePassword}>
-                      <div className="form-group"><label>Mật khẩu cũ</label><input type="password" required value={passForm.oldPassword} onChange={e => setPassForm({...passForm, oldPassword: e.target.value})} /></div>
-                      <div className="form-group"><label>Mật khẩu mới</label><input type="password" required value={passForm.password} onChange={e => setPassForm({...passForm, password: e.target.value})} /></div>
-                      <div className="form-group"><label>Xác nhận</label><input type="password" required value={passForm.confirmPassword} onChange={e => setPassForm({...passForm, confirmPassword: e.target.value})} /></div>
-                      <div className="modal-actions">
-                          <button type="button" className="btn-cancel" onClick={() => setShowPassModal(false)}>Hủy</button>
-                          <button type="submit" className="btn-save">Lưu</button>
-                      </div>
-                  </form>
-              </div>
-          </div>
-      )}
-
-      {/* 🟢 MODAL ĐÁNH GIÁ SẢN PHẨM */}
-      {showReviewModal && (
-        <div className="modal-overlay">
-          <div className="modal-content review-modal">
-            <h3>Đánh giá sản phẩm</h3>
-            <p className="review-product-name">{reviewForm.productName}</p>
-            
-            <div className="star-rating-input">
-                {[1, 2, 3, 4, 5].map(star => (
-                    <span 
-                        key={star} 
-                        className={`star ${star <= reviewForm.rating ? "filled" : ""}`}
-                        onClick={() => setReviewForm({...reviewForm, rating: star})}
-                    >
-                        ★
-                    </span>
-                ))}
-            </div>
-
-            <textarea 
-                className="review-textarea"
-                placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm này..."
-                value={reviewForm.comment}
-                onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
-            />
-
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowReviewModal(false)}>Đóng</button>
-              <button className="btn-save" onClick={handleSubmitReview}>Gửi Đánh Giá</button>
-            </div>
-          </div>
         </div>
-      )}
-
     </div>
   );
 };
