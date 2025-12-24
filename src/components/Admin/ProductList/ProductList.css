@@ -1,3 +1,4 @@
+/* --- LAYOUT CHUNG --- */
 .product-list-container {
   padding: 24px;
   background-color: #f8f9fa;
@@ -5,35 +6,118 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* --- HEADER & TABS --- */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .page-title {
   font-size: 24px;
   font-weight: 700;
   color: #111827;
+  margin: 0;
 }
 
+/* 🟢 CLASS QUAN TRỌNG: GOM NHÓM 1 HÀNG NGANG */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap; /* Bắt buộc thẳng hàng */
+}
+
+/* Style cho dropdown lọc */
+.category-filter {
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #374151;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  height: 40px; /* Chiều cao cố định để bằng button */
+  box-sizing: border-box;
+}
+
+.category-filter:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* --- BUTTONS --- */
 .btn-add {
-  background-color: #2563eb;
+  background-color: #16a34a; /* Màu xanh lá cho nút thêm mới */
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 0 16px;
+  height: 40px; /* Chiều cao cố định */
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .btn-add:hover {
-  background-color: #1d4ed8;
+  background-color: #15803d;
 }
 
-/* TABLE STYLES */
+/* --- 🟢 STYLE CHO NÚT CHUYỂN CHẾ ĐỘ (View Mode) --- */
+.view-mode-btn {
+  padding: 0 16px;
+  height: 40px; /* Chiều cao cố định */
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+  background: white;
+  color: #6b7280; /* Màu chữ xám khi chưa active */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.view-mode-btn:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* 🟢 ACTIVE MODE: Khi nút đang được chọn */
+/* Mặc định active sẽ đậm hơn */
+.view-mode-btn.active-mode {
+  font-weight: 600;
+  border-width: 1px;
+}
+
+/* 🟢 LOGIC MÀU RIÊNG CHO TỪNG NÚT */
+
+/* 1. Nút "Đang bán" (Là button view-mode đầu tiên) -> Màu Xanh */
+.header-actions button.view-mode-btn:nth-of-type(1).active-mode {
+    background-color: #e0e7ff; /* Nền xanh nhạt */
+    color: #3730a3;           /* Chữ xanh đậm */
+    border-color: #c7d2fe;
+}
+
+/* 2. Nút "Thùng rác" (Là button view-mode thứ hai) -> Màu Đỏ */
+.header-actions button.view-mode-btn:nth-of-type(2).active-mode {
+    background-color: #fee2e2; /* Nền đỏ nhạt */
+    color: #991b1b;           /* Chữ đỏ đậm */
+    border-color: #fecaca;
+}
+
+
+/* --- TABLE STYLES --- */
 .table-wrapper {
   background: white;
   border-radius: 12px;
@@ -46,6 +130,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  min-width: 800px;
 }
 
 .product-table th {
@@ -55,6 +140,7 @@
   text-align: left;
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
 }
 
 .product-table td {
@@ -64,55 +150,105 @@
   vertical-align: middle;
 }
 
+.no-data {
+  text-align: center;
+  padding: 32px !important;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* CONTENT IMAGES & BADGES */
 .product-thumb {
   width: 48px;
   height: 48px;
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
+  display: block;
 }
 
 .product-name-cell {
   font-weight: 500;
   color: #1f2937;
   max-width: 250px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .text-price {
   color: #ef4444;
   font-weight: 600;
+  font-family: monospace;
+  font-size: 15px;
 }
 
-/* STOCK BADGE */
 .stock-badge {
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  display: inline-block;
 }
 .in-stock { background-color: #dcfce7; color: #166534; }
 .out-stock { background-color: #fee2e2; color: #991b1b; }
 
-/* ACTIONS */
+/* ACTION BUTTONS */
 .action-buttons {
   display: flex;
   gap: 8px;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit, .btn-delete, .btn-restore {
   padding: 6px 12px;
   border: 1px solid #d1d5db;
   background: white;
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-edit:hover { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.btn-delete:hover { background-color: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.btn-restore { color: #16a34a; border-color: #16a34a; }
+.btn-restore:hover { background-color: #f0fdf4; }
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
+  gap: 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
   transition: all 0.2s;
 }
 
-.btn-edit:hover { background-color: #f3f4f6; color: #2563eb; border-color: #2563eb; }
-.btn-delete:hover { background-color: #fef2f2; color: #dc2626; border-color: #dc2626; }
+.pagination button:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
 
-/* MODAL STYLES */
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+/* MODAL */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -121,6 +257,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(2px);
 }
 
 .modal-content {
@@ -129,7 +266,7 @@
   max-width: 90%;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -139,75 +276,29 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 12px;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #6b7280;
-}
+.modal-header h3 { margin: 0; font-size: 18px; color: #111827; }
+.close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af; padding: 0; }
+.close-btn:hover { color: #4b5563; }
 
-.product-form .form-group {
-  margin-bottom: 16px;
-}
-
-.product-form label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: #374151;
-  font-size: 14px;
-}
-
+/* FORM */
+.product-form .form-group { margin-bottom: 16px; }
+.product-form label { display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px; }
 .product-form input, .product-form select, .product-form textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
+  width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;
 }
-
-.product-form input:focus { border-color: #2563eb; }
-
-.form-row {
-  display: flex;
-  gap: 16px;
+.product-form input:focus, .product-form select:focus, .product-form textarea:focus {
+  border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
+.form-row { display: flex; gap: 16px; }
 .form-row .form-group { flex: 1; }
-
-.img-preview {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-top: 10px;
-  border: 1px solid #e5e7eb;
-}
+.img-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 1px solid #e5e7eb; }
 
 .modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
+  display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f3f4f6;
 }
-
-.btn-cancel {
-  padding: 10px 20px;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-save {
-  padding: 10px 20px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
+.btn-cancel { padding: 10px 20px; background: white; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; color: #374151; font-weight: 500; }
+.btn-save { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }

@@ -16,6 +16,7 @@ import Cart from "./components/Customer/Cart/Cart";
 import Booking from "./components/Customer/Booking/Booking";
 import Footer from "./components/Footer/Footer";
 import PaymentCallback from "./components/Customer/Checkout/PaymentCallback";
+import CategoryList from "./components/Admin/ProductList/CategoryList/CategoryList";
 
 // --- Import các trang Layout ---
 import Staff from "./components/Staff/Staff"; 
@@ -117,6 +118,8 @@ const App: React.FC = () => {
           <Route path="customers" element={<UserManagement />} />
           <Route path="staff" element={<StaffManagement />} />
           <Route path="couponManagement" element={<CouponManagement />} />
+          
+<Route path="/admin/categories" element={<CategoryList />} />
         </Route>
 
         {/* === NHÓM 3: STAFF === */}
