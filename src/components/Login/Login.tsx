@@ -13,7 +13,7 @@ interface TokenResponse {
 
 interface LoginProps {
   onClose: () => void;
-  onLoginSuccess: (username: string, role: string) => void; // 👈 thêm role
+  onLoginSuccess: (username: string, role: string) => void;
 }
 
 // decode JWT (base64url safe)
@@ -31,7 +31,8 @@ function decodeJWT(token: string): any | null {
 }
 
 const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
-  const [username, setUsername] = useState<string>("");
+  // Đổi tên state thành loginInput cho đúng bản chất (có thể là user hoặc email)
+  const [loginInput, setLoginInput] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -44,8 +45,9 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
     setLoading(true);
 
     try {
+      // Backend vẫn nhận key là "username", nhưng giá trị ta truyền vào có thể là email
       const res = await api.post<TokenResponse>("/auth/access-token", {
-        username,
+        username: loginInput, 
         password,
       });
 
@@ -62,8 +64,6 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
 
       // ===== GIẢI MÃ TOKEN LẤY ROLE =====
       const decoded = decodeJWT(accessToken);
-      console.log("DECODED TOKEN >>>", decoded);
-
       let roleFromToken = "";
 
       if (decoded) {
@@ -87,11 +87,7 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
         }
       }
 
-      console.log("ROLE FROM TOKEN >>>", roleFromToken);
-
       setMessage("Đăng nhập thành công");
-
-      // báo cho Header biết: tên + role
       onLoginSuccess(u, roleFromToken);
 
       // điều hướng theo role
@@ -104,7 +100,7 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
       }
     } catch (err: any) {
       console.error(err);
-      setMessage("Sai tên đăng nhập hoặc mật khẩu");
+      setMessage("Sai thông tin đăng nhập hoặc mật khẩu");
     } finally {
       setLoading(false);
     }
@@ -129,12 +125,13 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
 
         <form onSubmit={handleLogin} className="login-form">
           <label>
-            Tên đăng nhập *
+            {/* 🟢 Cập nhật Label */}
+            Tên đăng nhập hoặc Email *
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Nhập tên đăng nhập"
+              value={loginInput}
+              onChange={(e) => setLoginInput(e.target.value)}
+              placeholder="Nhập username hoặc email..."
               required
             />
           </label>
@@ -150,6 +147,17 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
             />
           </label>
 
+          <div className="forgot-password-link">
+            <span
+              onClick={() => {
+                onClose();
+                navigate("/forgot-password");
+              }}
+            >
+              Quên mật khẩu?
+            </span>
+          </div>
+
           {message && <p className="login-message">{message}</p>}
 
           <button type="submit" className="login-submit" disabled={loading}>
@@ -157,16 +165,15 @@ const Login: React.FC<LoginProps> = ({ onClose, onLoginSuccess }) => {
           </button>
 
           <button
-  type="button"
-  className="login-register"
-  onClick={() => {
-    onClose();            // đóng popup
-    navigate("/register"); // chuyển trang đăng ký
-  }}
->
-  Tạo Tài Khoản
-</button>
-
+            type="button"
+            className="login-register"
+            onClick={() => {
+              onClose();
+              navigate("/register");
+            }}
+          >
+            Tạo Tài Khoản
+          </button>
         </form>
       </div>
     </div>

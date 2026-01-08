@@ -9,6 +9,7 @@ import "./index.css";
 import Customer from "./components/Customer/Customer";
 import UserProfile from "./components/User/UserProfile";
 import Register from "./components/Register/Register";
+import ForgotPassword from "./components/Login/ForgotPassword"; // 🟢 FILE MỚI
 import MyPets from "./components/Customer/MyPets/MyPets";
 import Promotions from "./components/Header/Promotions/Promotions";
 import Checkout from "./components/Customer/Checkout/Checkout";
@@ -27,7 +28,7 @@ import Revenue from "./components/Admin/Revenue/Revenue";
 import OrderDetail from "./components/Admin/OrderDetail/OrderDetail";
 import OrderList from "./components/Admin/OrderList/OrderList";
 import ProductList from "./components/Admin/ProductList/ProductList";
-import CategoryList from "./components/Admin/ProductList/CategoryList/CategoryList"; // Import Category
+import CategoryList from "./components/Admin/ProductList/CategoryList/CategoryList"; 
 import ServiceandSpa from "./components/Admin/ServiceandSpa/ServiceandSpa";
 import Appointment from "./components/Admin/Appointment/Appointment";
 import UserManagement from "./components/Admin/UserManagement/UserManagement";
@@ -41,6 +42,7 @@ import ContactButtons from "./components/ChatWidget/ContactButtons";
 // --- Import Trang Thống Kê Mới ---
 import ProductSales from "./components/Admin/Revenue/ProductSales";
 import AppointmentSales from "./components/Admin/Revenue/AppointmentSales";
+import ResetPassword from "./components/Login/ResetPassword";
 
 const MainLayout: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -87,12 +89,17 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* === NHÓM 1: KHÁCH HÀNG === */}
+        {/* === NHÓM 1: KHÁCH HÀNG (Dùng MainLayout có Header/Footer) === */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Customer />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* 🟢 HAI ROUTE MỚI CHO QUÊN MẬT KHẨU */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
           <Route path="/my-pets" element={<MyPets />} />
           <Route path="/promotions" element={<Promotions />} />
           <Route path="/checkout" element={<Checkout />} />
@@ -115,7 +122,6 @@ const App: React.FC = () => {
           <Route path="staff" element={<StaffManagement />} />
           <Route path="couponManagement" element={<CouponManagement />} />
           
-          {/* ✅ ĐÃ SỬA: Dùng đường dẫn tương đối (không có /admin ở đầu) */}
           <Route path="categories" element={<CategoryList />} />
           <Route path="analytics/products" element={<ProductSales />} />
           <Route path="analytics/appointments" element={<AppointmentSales />} />

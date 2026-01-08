@@ -1,6 +1,8 @@
-/* ===========================
-   OVERLAY MỜ TOÀN MÀN HÌNH
-=========================== */
+/* =========================================================
+   1. PHẦN CŨ CỦA BẠN (GIỮ NGUYÊN KHÔNG ĐỔI)
+   ========================================================= */
+
+/* OVERLAY MỜ TOÀN MÀN HÌNH */
 .login-overlay {
   position: fixed;
   inset: 0;
@@ -10,9 +12,7 @@
   z-index: 9999;
 }
 
-/* ===========================
-   PANEL LOGIN BÊN PHẢI
-=========================== */
+/* PANEL LOGIN BÊN PHẢI */
 .login-panel {
   width: 420px;
   max-width: 100%;
@@ -35,9 +35,7 @@
   }
 }
 
-/* ===========================
-   NÚT ĐÓNG (X)
-=========================== */
+/* NÚT ĐÓNG (X) */
 .login-close {
   position: absolute;
   top: 16px;
@@ -54,14 +52,13 @@
   opacity: 1;
 }
 
-/* ===========================
-   FORM LOGIN
-=========================== */
+/* FORM LOGIN */
 .login-panel h2 {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 24px;
   margin-top: 10px;
+  color: #333; /* Thêm màu cho rõ */
 }
 
 .login-form label {
@@ -69,6 +66,7 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
+  color: #444;
 }
 
 .login-form input {
@@ -86,17 +84,21 @@
   border-color: #204ecf; /* màu xanh của header */
 }
 
-/* ===========================
-   THÔNG BÁO LỖI / MESSAGE
-=========================== */
+/* THÔNG BÁO LỖI / MESSAGE (Cũ) */
 .login-message {
   font-size: 14px;
   margin-bottom: 16px;
 }
 
-/* ===========================
-   NÚT LOGIN
-=========================== */
+.login-message.success {
+  color: #16a34a;
+}
+
+.login-message.error {
+  color: #dc2626;
+}
+
+/* NÚT LOGIN */
 .login-submit {
   width: 100%;
   padding: 12px 0;
@@ -115,9 +117,7 @@
   background: #133ab0;
 }
 
-/* ===========================
-   NÚT TẠO TÀI KHOẢN
-=========================== */
+/* NÚT TẠO TÀI KHOẢN */
 .login-register {
   width: 100%;
   padding: 12px 0;
@@ -135,11 +135,105 @@
 .login-register:hover {
   background: #cf5c2c;
 }
-.login-message.success {
-  color: #16a34a;
+
+/* =========================================================
+   2. PHẦN BỔ SUNG (CHO QUÊN MẬT KHẨU & RESET PASSWORD)
+   ========================================================= */
+
+/* --- Link "Quên mật khẩu?" trong form Login --- */
+.forgot-password-link {
+  text-align: right;
+  margin-bottom: 15px;
+  margin-top: -10px; /* Kéo lên gần input password hơn chút */
 }
 
-/* Lỗi màu đỏ */
-.login-message.error {
-  color: #dc2626;
+.forgot-password-link span {
+  color: #204ecf; /* Dùng màu xanh chủ đạo của bạn */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.forgot-password-link span:hover {
+  text-decoration: underline;
+}
+
+/* --- Hộp thông báo đẹp (Alert Box) --- 
+   Dùng cho trang Quên mật khẩu khi báo thành công/thất bại */
+.alert-message {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Màu xanh khi thành công */
+.alert-success {
+  background-color: #dcfce7; /* Xanh nhạt */
+  color: #166534;            /* Chữ xanh đậm */
+  border: 1px solid #bbf7d0;
+}
+
+/* Màu đỏ khi lỗi */
+.alert-error {
+  background-color: #fee2e2; /* Đỏ nhạt */
+  color: #991b1b;            /* Chữ đỏ đậm */
+  border: 1px solid #fecaca;
+}
+
+/* --- Trạng thái Disabled cho nút (khi đang gửi mail...) --- */
+.login-submit:disabled {
+  background-color: #9ca3af; /* Màu xám */
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* --- Link quay lại trang chủ --- */
+.back-to-home {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.back-to-home span {
+  color: #204ecf;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-to-home span:hover {
+  text-decoration: underline;
+}
+
+/* --- [TÙY CHỌN] Class hỗ trợ căn giữa cho trang ResetPassword --- 
+   Nếu bạn muốn trang ResetPassword hiện giữa màn hình thay vì trượt từ phải,
+   hãy thêm class "centered-panel" vào div login-panel ở trang ResetPassword.tsx
+*/
+.login-panel.centered-panel {
+  width: 450px;
+  height: auto;       /* Không full chiều cao */
+  max-height: 90vh;
+  margin: auto;       /* Căn giữa */
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform: none;    /* Bỏ hiệu ứng trượt */
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Dùng animation này cho panel căn giữa */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Căn giữa overlay nếu dùng centered-panel */
+.login-overlay.centered-overlay {
+  justify-content: center; /* Căn giữa ngang */
+  align-items: center;     /* Căn giữa dọc */
 }
