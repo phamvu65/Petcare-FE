@@ -1,378 +1,565 @@
-/* =========================================================
-   CUSTOMER.CSS - FINAL FIXED VERSION
-   Layout: 5 Cột Tràn Viền + 3 Nút Ngang + Tooltip Xịn
-   ========================================================= */
-
+/* --- BIẾN MÀU SẮC & CẤU HÌNH CHUNG --- */
 :root {
-  --primary-gradient: linear-gradient(135deg, #6d5dfc, #8a7bff);
-  --text-main: #333;
-  --text-light: #6b7280;
-  /* Reuse global bg color when available so page gutters are consistent */
-  --bg-page: var(--bg-color, #f3f4f6);
-  
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+  --primary-color: #4f46e5; /* Màu chàm hiện đại */
+  --primary-hover: #4338ca;
+  --secondary-color: #f59e0b; /* Màu cam vàng cho giỏ hàng/mua */
+  --bg-color: #f3f4f6;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.5);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --radius-lg: 16px;
+  --radius-md: 12px;
   --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  --radius-lg: 20px;
 }
 
-/* ============================
-   1. LAYOUT WRAPPER (FULL WIDTH)
-   ============================ */
-.customer-page-wrapper {
-  background-color: var(--bg-page);
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #eef2f6; /* Nền xám xanh nhạt */
   background-image: 
-    radial-gradient(at 0% 0%, rgba(109, 93, 252, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(138, 123, 255, 0.1) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* --- LAYOUT CHÍNH --- */
+.customer-page-wrapper {
+  padding: 2rem;
   min-height: 100vh;
-  padding: 20px 10px; /* Padding nhỏ để tận dụng tối đa màn hình */
-  font-family: 'Inter', sans-serif;
 }
 
 .customer-container {
   display: flex;
-  width: 100%;
-  max-width: 100%; 
-  margin: 0;
-  gap: 15px;
-  background: transparent; /* let wrapper background show in gutters */
-  padding: 0; /* gutters controlled by wrapper */
+  gap: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-/* ============================
-   2. SIDEBAR
-   ============================ */
-.customer-sidebar {
-  width: 250px;
-  flex-shrink: 0;
-  padding: 20px 15px;
-  height: fit-content;
-  position: sticky;
-  top: 20PX;
-  z-index: 10;
-}
-
-.glass-panel {
+/* --- CLASS DÙNG CHUNG (GLASSMORPHISM) --- */
+.glass-panel, .glass-card, .glass-modal {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: var(--glass-border);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--glass-shadow);
   border-radius: var(--radius-lg);
 }
 
+/* --- SIDEBAR --- */
+.customer-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 24px;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
 .sidebar-title {
-  margin-top: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
   margin-bottom: 20px;
-  font-size: 1.1rem;
-  color: #6d5dfc;
-  font-weight: 800;
-  text-transform: uppercase;
-  border-bottom: 2px solid rgba(109, 93, 252, 0.1);
+  border-bottom: 2px solid rgba(0,0,0,0.05);
   padding-bottom: 10px;
 }
 
-.category-list { list-style: none; padding: 0; margin: 0 0 25px 0; }
-.category-item { margin-bottom: 8px; }
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.category-item {
+  margin-bottom: 12px;
+}
 
 /* Custom Checkbox */
 .custom-checkbox {
-  display: flex; align-items: center; cursor: pointer;
-  position: relative; padding-left: 28px; font-size: 0.9rem;
-  color: var(--text-main); transition: var(--transition);
-}
-.custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; }
-.checkmark {
-  position: absolute; left: 0; top: 0; height: 18px; width: 18px;
-  background-color: rgba(255,255,255,0.5); border: 1px solid #ccc; border-radius: 4px;
-}
-.custom-checkbox:hover input ~ .checkmark { background-color: #eee; }
-.custom-checkbox input:checked ~ .checkmark { background-color: #6d5dfc; border-color: #6d5dfc; }
-.checkmark:after { content: ""; position: absolute; display: none; }
-.custom-checkbox input:checked ~ .checkmark:after { display: block; }
-.custom-checkbox .checkmark:after {
-  left: 5px; top: 1px; width: 4px; height: 9px;
-  border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  transition: var(--transition);
 }
 
-/* ============================
-   3. MAIN CONTENT
-   ============================ */
-.customer-content { flex: 1; min-width: 0; }
+.custom-checkbox:hover {
+  color: var(--primary-color);
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  margin-right: 12px;
+  position: relative;
+  transition: var(--transition);
+  background: white;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* --- MAIN CONTENT --- */
+.customer-content {
+  flex: 1;
+}
 
 .customer-content-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 15px 20px; margin-bottom: 15px;
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .page-title {
-  margin: 0; font-size: 1.4rem; color: #333; font-weight: 800;
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-dark);
 }
 
+/* Select Box Hiện Đại */
 .neo-select {
-  padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1);
-  background: rgba(255,255,255,0.8); font-size: 0.9rem; color: var(--text-main);
-  outline: none; cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
 }
 
-/* ============================
-   4. PRODUCT GRID & CARD
-   ============================ */
+.neo-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* --- PRODUCT GRID --- */
 .product-grid {
   display: grid;
-  /* 5 CỘT TRÊN MÀN HÌNH LỚN */
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border-radius: 20px;
-  overflow: hidden; /* Để bo góc ảnh */
-  transition: transform 0.2s ease;
+.product-card {
+  padding: 16px;
+  transition: var(--transition);
   display: flex;
   flex-direction: column;
-  padding: 15px; /* Padding bên trong thẻ */
   position: relative;
+  overflow: hidden;
 }
 
-.glass-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  background: rgba(255, 255, 255, 0.9);
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* Ảnh sản phẩm */
 .product-image-wrap {
-  position: relative;
   width: 100%;
-  padding-top: 100%; /* Hình vuông */
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  /* Image wrapper uses page background so padding/gutter areas are consistent */
-  background: var(--bg-page);
-  border-radius: 15px; /* Bo góc ảnh riêng */
+  margin-bottom: 16px;
+  background: #fff;
 }
 
 .img-clickable {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .img-clickable img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Hoặc cover tùy loại ảnh */
   transition: transform 0.5s ease;
 }
-.glass-card:hover .img-clickable img { transform: scale(1.1); }
+
+.product-card:hover .img-clickable img {
+  transform: scale(1.1);
+}
 
 .product-image-placeholder {
-  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-  /* Use main page color so placeholder area matches surrounding gutters */
-  background-color: var(--bg-page); color: #9ca3af; border: 2px dashed rgba(0,0,0,0.06);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e5e7eb;
+  color: #9ca3af;
 }
 
 /* Thông tin sản phẩm */
 .product-info {
-  padding: 12px 5px 0 5px;
-  flex: 1; display: flex; flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-brand {
-  font-size: 0.75rem; color: #7a5af5; font-weight: 700;
-  text-transform: uppercase; margin-bottom: 5px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-gray);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
 .product-name {
-  font-size: 0.95rem; font-weight: 600; color: var(--text-main);
-  margin-bottom: 5px; line-height: 1.3;
-  overflow: hidden; text-overflow: ellipsis; display: -webkit-box;
-  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  cursor: pointer; height: 2.6em; /* Cố định chiều cao tên */
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s;
 }
-.product-name:hover { color: #6d5dfc; }
 
-.product-price-wrap {
-  margin-top: auto; margin-bottom: 10px;
+.product-name:hover {
+  color: var(--primary-color);
 }
 
 .product-price {
-  font-size: 1.1rem; font-weight: 800; color: #e60000;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-top: auto; /* Đẩy giá xuống sát nút */
 }
 
-/* ============================
-   5. NÚT TRÒN Ở ĐÁY (FIXED)
-   ============================ */
-/* 🟢 ĐÂY LÀ PHẦN SỬA LỖI HÀNG DỌC */
+/* Nút hành động (Footer của Card) */
 .product-card-bottom-actions {
-  display: flex; /* Bắt buộc dùng Flex */
-  flex-direction: row; /* Xếp ngang */
-  justify-content: center; /* Căn giữa */
-  align-items: center;
-  gap: 12px; /* Khoảng cách giữa các nút */
-  margin-top: auto;
-  padding-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Style nút tròn */
 .action-btn-icon {
-  width: 40px; height: 40px;
-  border-radius: 50%; border: none;
-  background: var(--primary-gradient);
-  color: white; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  position: relative; /* Để tooltip bám vào */
-  box-shadow: 0 4px 10px rgba(109, 93, 252, 0.3);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f9fafb;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* Cho tooltip */
 }
 
 .action-btn-icon:hover {
-  transform: scale(1.15);
-  box-shadow: 0 6px 15px rgba(109, 93, 252, 0.5);
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
 }
 
-/* --- TOOLTIP (Hiện bên trên nút) --- */
-.action-btn-icon[data-tooltip]:hover::after {
+/* Tooltip đơn giản */
+.action-btn-icon[data-tooltip]:hover::before {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 125%; /* Hiện lên trên nút */
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
+  margin-bottom: 8px;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 4px 8px;
   font-size: 0.75rem;
-  font-weight: 500;
+  border-radius: 4px;
   white-space: nowrap;
-  opacity: 0;
-  animation: fadeInTooltip 0.2s forwards;
   pointer-events: none;
-  z-index: 999;
+  z-index: 10;
 }
 
-.action-btn-icon[data-tooltip]:hover::before {
-  content: "";
-  position: absolute;
-  bottom: 115%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
-  opacity: 0;
-  animation: fadeInTooltip 0.2s forwards;
-  z-index: 999;
-}
-
-@keyframes fadeInTooltip {
-  from { opacity: 0; transform: translateX(-50%) translateY(5px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-/* ============================
-   6. PAGINATION & LOADING
-   ============================ */
-.pagination-glass { display: flex; justify-content: center; align-items: center; margin-top: 30px; gap: 15px; }
-.page-btn {
-  padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1); background: white;
-  cursor: pointer; color: var(--text-main); transition: var(--transition);
-}
-.page-btn:hover:not(.disabled) { background: var(--primary-gradient); color: white; border-color: transparent; }
-.page-btn.disabled { opacity: 0.5; cursor: not-allowed; }
-.page-info { font-weight: 600; color: var(--text-light); }
-
-.loading-state, .empty-state-glass {
-  text-align: center; padding: 60px; background: var(--glass-bg); border-radius: 20px;
-  margin-top: 20px; border: 1px dashed rgba(0,0,0,0.1);
-}
-.spinner {
-  border: 4px solid #f3f3f3; border-top: 4px solid #6d5dfc;
-  border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* ============================
-   7. MODAL DETAIL
-   ============================ */
-.modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-  z-index: 2000; display: flex; align-items: center; justify-content: center;
-  animation: fadeIn 0.2s ease;
-}
-.glass-modal {
-  background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);
-  border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-  padding: 0; overflow: hidden; animation: slideUp 0.3s ease; position: relative;
-}
-.product-detail-modal { width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; }
-.close-btn-abs {
-  position: absolute; top: 15px; right: 15px;
-  background: rgba(0,0,0,0.1); border: none;
-  width: 30px; height: 30px; border-radius: 50%;
-  font-size: 1.2rem; cursor: pointer; z-index: 10;
-  transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-}
-.close-btn-abs:hover { background: #e60000; color: white; }
-
-.detail-layout { display: flex; gap: 30px; padding: 30px; }
-.detail-left { flex: 1; }
-.detail-img-wrapper {
-  width: 100%; padding-top: 100%; position: relative;
-  /* Use page background to keep paddings and margins uniform */
-  background: var(--bg-page); border-radius: 16px; overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-.detail-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
-.detail-right { flex: 1.2; display: flex; flex-direction: column; }
-.detail-category { font-size: 0.9rem; color: #6d5dfc; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
-.detail-title { margin: 0 0 10px; font-size: 1.8rem; color: #333; line-height: 1.3; }
-.detail-price { font-size: 1.6rem; font-weight: 800; color: #e60000; margin: 15px 0; }
-.detail-desc-box {
-  background: rgba(243, 244, 246, 0.6); padding: 15px;
-  border-radius: 12px; margin-bottom: 25px;
-  max-height: 150px; overflow-y: auto;
-  font-size: 0.95rem; line-height: 1.6; color: var(--text-light);
-}
-.detail-actions { display: flex; gap: 15px; margin-top: auto; }
-
-/* Buttons in Modal */
+/* --- BUTTON STYLES --- */
 .btn-modern {
-  padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem;
-  cursor: pointer; transition: var(--transition); border: none; outline: none;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
+
 .btn-modern.primary {
-  background: var(--primary-gradient); color: white;
-  box-shadow: 0 4px 15px rgba(109, 93, 252, 0.3);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: white;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
 }
-.btn-modern.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(109, 93, 252, 0.4); }
-.btn-modern.secondary { background: white; color: #6d5dfc; border: 1px solid #6d5dfc; }
-.btn-modern.secondary:hover { background: #fdfdfd; transform: translateY(-1px); }
+
+.btn-modern.primary:hover {
+  box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-modern.secondary {
+  background: white;
+  color: var(--text-dark);
+  border: 1px solid #d1d5db;
+}
+
+.btn-modern.secondary:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: #f9fafb;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* --- PHÂN TRANG --- */
+.pagination-glass {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-btn {
+  background: var(--glass-bg);
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.page-btn:hover:not(.disabled) {
+  background: var(--primary-color);
+  color: white;
+}
+
+.page-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* --- MODAL CHI TIẾT --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content.product-detail-modal {
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  background: #fff;
+  padding: 0;
+  animation: slideUp 0.3s ease;
+}
+
+.close-btn-abs {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: #9ca3af;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.2s;
+}
+
+.close-btn-abs:hover {
+  color: #ef4444;
+}
+
+.detail-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .detail-layout {
+    flex-direction: row;
+  }
+}
+
+.detail-left {
+  flex: 1;
+  background: #f9fafb;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-img-wrapper img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+}
+
+.detail-right {
+  flex: 1.2;
+  padding: 40px;
+}
+
+.detail-category {
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.detail-title {
+  font-size: 2rem;
+  margin: 10px 0;
+  color: var(--text-dark);
+}
+
+.detail-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ef4444; /* Màu đỏ cho giá chi tiết */
+  margin: 16px 0;
+}
+
+.detail-desc-box {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 16px;
+}
 
 .detail-reviews-section {
-  padding: 30px; background: rgba(249, 250, 251, 0.8);
-  border-top: 1px solid rgba(0,0,0,0.05);
+  padding: 30px 40px;
+  border-top: 1px solid #e5e7eb;
+  background: #fdfdfd;
 }
-.review-heading { margin-top: 0; margin-bottom: 20px; color: #333; font-size: 1.3rem; }
 
-/* ============================
-   8. RESPONSIVE GRID
-   ============================ */
-@media (min-width: 1400px) { .product-grid { grid-template-columns: repeat(5, 1fr); } }
-@media (max-width: 1399px) and (min-width: 1100px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 1099px) and (min-width: 768px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
-  .customer-container { flex-direction: column; }
-  .customer-sidebar { width: 100%; position: static; margin-bottom: 20px; }
+.review-heading {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
 }
-@media (max-width: 767px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .customer-container { flex-direction: column; padding: 0; }
-  .customer-sidebar { width: 100%; }
-  .detail-layout { flex-direction: column; }
-  .detail-img-wrapper { width: 80%; margin: 0 auto; }
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Loading Spinner */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state-glass {
+  text-align: center;
+  padding: 60px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 16px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .customer-container {
+    flex-direction: column;
+  }
+  .customer-sidebar {
+    width: 100%;
+    position: static;
+  }
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .detail-actions {
+    flex-direction: column;
+  }
+}
+

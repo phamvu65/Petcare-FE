@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown"; // <--- Đã thêm thư viện này
 import "./ChatWidget.css";
 
 interface Message {
@@ -20,7 +21,7 @@ const ChatWidget: React.FC = () => {
     if (!input.trim()) return;
 
     const userMsg: Message = { role: "user", message: input };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
 
@@ -38,17 +39,17 @@ const ChatWidget: React.FC = () => {
 
       if (data.status === 200) {
         const aiMsg: Message = { role: "model", message: data.data.reply };
-        setMessages(prev => [...prev, aiMsg]);
+        setMessages((prev) => [...prev, aiMsg]);
       } else {
-        setMessages(prev => [
+        setMessages((prev) => [
           ...prev,
-          { role: "model", message: "Lỗi: " + data.message }
+          { role: "model", message: "Lỗi: " + data.message },
         ]);
       }
     } catch (err) {
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
-        { role: "model", message: "Không thể kết nối tới server 😿" }
+        { role: "model", message: "Không thể kết nối tới server 😿" },
       ]);
     } finally {
       setIsLoading(false);
@@ -61,9 +62,7 @@ const ChatWidget: React.FC = () => {
 
   return (
     <div className="chat-window">
-      <div className="chat-header">
-        🐶 PetCare Support
-      </div>
+      <div className="chat-header">🐶 PetCare Support</div>
 
       <div className="chat-body">
         {messages.length === 0 && (
@@ -86,15 +85,23 @@ const ChatWidget: React.FC = () => {
                 msg.role === "user" ? "message-user" : "message-model"
               }`}
             >
-              {msg.message}
+              {/* SỬA ĐỔI TẠI ĐÂY: Dùng ReactMarkdown để render */}
+              <ReactMarkdown
+                components={{
+                  // Tùy chỉnh thẻ p để không bị margin quá rộng trong bong bóng chat
+                  p: ({ node, ...props }) => (
+                    <p style={{ margin: 0, padding: 0 }} {...props} />
+                  ),
+                }}
+              >
+                {msg.message}
+              </ReactMarkdown>
             </div>
           </div>
         ))}
 
         {isLoading && (
-          <div className="loading-dots">
-            PetBot đang suy nghĩ...
-          </div>
+          <div className="loading-dots">PetBot đang suy nghĩ...</div>
         )}
 
         <div ref={messagesEndRef} />

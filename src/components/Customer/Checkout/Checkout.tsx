@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../../api/axiosInstance";
 import "./Checkout.css";
 
+// --- 1. CẬP NHẬT INTERFACE: Thêm trường images ---
 interface CheckoutItem {
   id?: number;
   productId: number;
@@ -13,6 +14,7 @@ interface CheckoutItem {
   unitPrice?: number;
   image?: string;
   productImage?: string;
+  images?: { id: number; imageUrl: string }[]; // <--- Đã thêm dòng này để hứng dữ liệu ảnh từ trang Customer
 }
 
 interface Address {
@@ -63,6 +65,7 @@ const Checkout: React.FC = () => {
     recipientName: "", recipientPhone: "", city: "", ward: "", addressDetail: ""
   });
 
+  // --- LOGIC LOAD DỮ LIỆU ---
   useEffect(() => {
     if (isBuyNowMode && buyNowItems) {
       setItems(buyNowItems);
@@ -139,6 +142,7 @@ const Checkout: React.FC = () => {
     }
   };
 
+  // --- LOGIC COUPON ---
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) return;
     try {
@@ -179,6 +183,7 @@ const Checkout: React.FC = () => {
     setCouponCode("");
   };
 
+  // --- LOGIC SỐ LƯỢNG ---
   const handleQuantityChange = async (index: number, change: number) => {
     const currentItem = items[index];
     const newQuantity = currentItem.quantity + change;
@@ -195,6 +200,7 @@ const Checkout: React.FC = () => {
     }
   };
 
+  // --- LOGIC ĐỊA CHỈ ---
   const handleAddAddress = async () => {
     const { recipientName, recipientPhone, city, ward, addressDetail } = newAddress;
     if (!recipientName || !recipientPhone || !city || !ward || !addressDetail) {
@@ -273,7 +279,7 @@ const Checkout: React.FC = () => {
       } else {
         // 3. Nếu là COD -> Chuyển về TRANG CHỦ
         alert(`🎉 Đặt hàng thành công! Mã đơn: ${newOrder.id}`);
-        navigate("/"); // <--- ĐÃ SỬA: Chuyển về trang chủ
+        navigate("/"); 
       }
     } catch (error: any) {
       console.error("Order error:", error);
@@ -312,20 +318,29 @@ const Checkout: React.FC = () => {
           <div className="checkout-section">
             <h3><i className="fas fa-box"></i> Sản phẩm ({items.length})</h3>
             <div className="checkout-items">
-              {items.map((item, idx) => (
-                <div key={idx} className="checkout-item">
-                  <img src={item.image || item.productImage || "https://placehold.co/60"} alt="img" />
-                  <div className="item-details">
-                    <h4>{item.productName || item.name || "Sản phẩm"}</h4>
-                    <span className="item-price">{(item.price || item.unitPrice || 0).toLocaleString()}đ</span>
+              {items.map((item, idx) => {
+                // --- 2. LOGIC LẤY ẢNH ĐƯỢC CẬP NHẬT ---
+                const imageUrl = item.image 
+                  || item.productImage 
+                  || (item.images && item.images.length > 0 ? item.images[0].imageUrl : null)
+                  || "https://placehold.co/60";
+
+                return (
+                  <div key={idx} className="checkout-item">
+                     {/* Sử dụng biến imageUrl vừa tạo */}
+                    <img src={imageUrl} alt="img" style={{objectFit: 'cover'}} />
+                    <div className="item-details">
+                      <h4>{item.productName || item.name || "Sản phẩm"}</h4>
+                      <span className="item-price">{(item.price || item.unitPrice || 0).toLocaleString()}đ</span>
+                    </div>
+                    <div className="quantity-control">
+                      <button onClick={() => handleQuantityChange(idx, -1)}>-</button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => handleQuantityChange(idx, 1)}>+</button>
+                    </div>
                   </div>
-                  <div className="quantity-control">
-                    <button onClick={() => handleQuantityChange(idx, -1)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => handleQuantityChange(idx, 1)}>+</button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

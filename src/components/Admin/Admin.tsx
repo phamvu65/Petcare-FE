@@ -79,11 +79,11 @@ const Admin: React.FC = () => {
           </div>
           <div className="header-right">
             <div className="admin-profile">
-              <img
+              {/* <img
                 src="https://via.placeholder.com/40"
                 alt="Admin"
                 className="avatar"
-              />
+              /> */}
               <span className="admin-name">Xin chào, Admin</span>
             </div>
           </div>
