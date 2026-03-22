@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import "./MyPets.css";
+import "./Mypets.css";
 
 // --- TỪ ĐIỂN DỮ LIỆU THÚ CƯNG ---
 const PET_SPECIES = ["Chó", "Mèo", "Chim", "Hamster", "Khác"];
