@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import ReactMarkdown from "react-markdown"; // <--- Đã thêm thư viện này
+import ReactMarkdown from "react-markdown"; 
 import "./ChatWidget.css";
 
 interface Message {
@@ -26,7 +26,8 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8080/chat", {
+      // const response = await fetch("http://localhost:8080/chat",
+      const response = await fetch("https://petcare-backend-api.onrender.com/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -37,15 +38,21 @@ const ChatWidget: React.FC = () => {
 
       const data = await response.json();
 
-      if (data.status === 200) {
-        const aiMsg: Message = { role: "model", message: data.data.reply };
+      // --- [ĐÃ SỬA TẠI ĐÂY] Dùng response.ok để kiểm tra thành công thay vì data.status ---
+      if (response.ok) {
+        // Trích xuất linh hoạt: bao lô mọi trường hợp Backend có thể trả về
+        const aiText = data.data?.reply || data.data || data.reply || data.message || "Đã nhận câu trả lời nhưng không đọc được nội dung.";
+        
+        const aiMsg: Message = { role: "model", message: aiText };
         setMessages((prev) => [...prev, aiMsg]);
       } else {
         setMessages((prev) => [
           ...prev,
-          { role: "model", message: "Lỗi: " + data.message },
+          { role: "model", message: "Lỗi: " + (data.message || "Máy chủ từ chối") },
         ]);
       }
+      // -----------------------------------------------------------------------------------
+      
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -85,7 +92,6 @@ const ChatWidget: React.FC = () => {
                 msg.role === "user" ? "message-user" : "message-model"
               }`}
             >
-              {/* SỬA ĐỔI TẠI ĐÂY: Dùng ReactMarkdown để render */}
               <ReactMarkdown
                 components={{
                   // Tùy chỉnh thẻ p để không bị margin quá rộng trong bong bóng chat
