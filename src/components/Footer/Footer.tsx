@@ -18,6 +18,9 @@ const Footer: React.FC = () => {
               <p className="footer-desc">
                 PetCare - Hệ thống cửa hàng thú cưng uy tín hàng đầu. Chúng tôi cung cấp các sản phẩm tốt nhất cho người bạn nhỏ của bạn.
               </p>
+              <p className="footer-desc">
+                Website này là đồ án cá nhân/dự án thử nghiệm kỹ thuật. Không có giá trị kinh doanh và không bán hàng thật.
+              </p>
               <div className="contact-info">
                 <p><i className="fas fa-map-marker-alt"></i> 123 Đường Láng, Đống Đa, Hà Nội</p>
                 <p><i className="fas fa-phone-alt"></i> 0832 234 628</p>
