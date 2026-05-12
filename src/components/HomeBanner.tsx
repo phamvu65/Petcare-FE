@@ -10,11 +10,11 @@ interface PolicyItem {
 }
 
 const HomeBanner: React.FC = () => {
-  // 1. Danh sách ảnh Banner (Bạn có thể thêm bao nhiêu ảnh tùy thích vào đây)
+  // 1. Danh sách ảnh Banner 
   const bannerImages = [
-    "https://paddy.vn/cdn/shop/files/banner_web_1880_x_720_px_1.png?v=1763368743&width=1880",
-    "https://paddy.vn/cdn/shop/files/paddy-silver-spoon_1880_x_720_px.jpg?v=1748850125&width=1880",
-    "https://paddy.vn/cdn/shop/files/banner_web_1880_x_720_px_fda8c25f-aea1-4b7e-af96-e0bbd9e99e6d.png?v=1763008773&width=1880"
+    "https://cdn.shopify.com/s/files/1/0624/1746/9697/articles/Zalo_OA_1c65d140-d47f-42e1-a289-1773d271bdbd.jpg?v=1776164684",
+    "https://cdn.shopify.com/s/files/1/0624/1746/9697/articles/Zalo_OA_f8cba97e-f97b-433e-ab6c-66d78a5f98d0.jpg?v=1776765386",
+    "https://cdn.shopify.com/s/files/1/0624/1746/9697/articles/Zalo_OA_2f4fafef-3980-4ef9-af2a-88375920a5a7.jpg?v=1775725292"
   ];
 
   // 2. State quản lý chỉ số (index) của slide hiện tại
